@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SGX - MISSION - MIS</title>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <style>
   body{
     font-family: Segoe UI, Arial, Calibri, sans-serif;
@@ -244,6 +245,89 @@
     </table>
   </div>
 </div>
+<!-- ================= NEW DISPATCH + ACHIEVEMENT ================= -->
+<div class="flex">
+  <div class="left60">
+    <!-- DISPATCH -->
+    <table class="thick">
+      <tr><th colspan="4" class="subheader">Dispatch</th></tr>
+      <tr><th class="left">Material</th><th>Day</th><th>Night</th><th>Total</th></tr>
+      <tr><td class="left">Quarry</td><td>10</td><td>45</td><td>55</td></tr>
+      <tr><td class="left">Plant</td><td>20</td><td>265</td><td>285</td></tr>
+      <tr><td class="left">40-65</td><td>24</td><td>258</td><td>282</td></tr>
+      <tr><td class="left">Rivo</td><td>620</td><td>25</td><td>645</td></tr>
+      <tr><td class="left">M Sand</td><td>0</td><td>251</td><td>251</td></tr>
+      <tr><td class="left">Scalpin</td><td>0</td><td>120</td><td>120</td></tr>
+      <tr class="total">
+        <td class="left"><b>Total Qty</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr class="total">
+        <td class="left"><b>Total Vehicles</b></td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td class="left" colspan="4">REMARK : -</td>
+      </tr>
+    </table>
+  </div>
+  <div class="right40">
+    <!-- ACHIEVEMENT -->
+    <table class="thick">
+      <tr><th colspan="3" class="subheader" style="background:#007bff;">Achievement</th></tr>
+      <tr><th class="left">Material</th><th>FTD %</th><th>MTD %</th></tr>
+      <tr><td class="left">Quarry</td><td>68%</td><td>74%</td></tr>
+      <tr><td class="left">Plant</td><td>56%</td><td>68%</td></tr>
+      <tr><td class="left">Machinery</td><td>68%</td><td>75%</td></tr>
+      <tr><td class="left">Rivo Dispatch</td><td>43%</td><td>62%</td></tr>
+    </table>
+  </div>
 </div>
+<div style="text-align:center; margin-top:20px;">
+  <button onclick="shareReport()" style="background:#25D366; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-size:16px;">Share Report on WhatsApp</button>
+</div>
+</div>
+<script>
+async function shareReport() {
+  try {
+    const element = document.querySelector('.container');
+    const canvas = await html2canvas(element, {
+      scale: window.devicePixelRatio > 1 ? 2 : 1,
+      useCORS: true,
+      allowTaint: true
+    });
+    const imgData = canvas.toDataURL('image/png');
+    const response = await fetch(imgData);
+    const blob = await response.blob();
+    const fileName = `SGX-MIS-Report-${new Date().toISOString().split('T')[0]}.png`;
+    const file = new File([blob], fileName, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        title: 'SGX Mission MIS Report',
+        text: `MIS Report for ${new Date().toLocaleDateString()}`,
+        files: [file]
+      });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  } catch (err) {
+    console.error('Error sharing:', err);
+    const url = URL.createObjectURL(new Blob([`Error generating image. Please save the page manually.`], {type: 'text/plain'}));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'error.txt';
+    a.click();
+  }
+}
+</script>
 </body>
 </html>
