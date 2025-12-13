@@ -204,6 +204,13 @@
  border-radius: 6px;
  background: #fff;
  }
+ .summary-header {
+ text-align: center;
+ margin-bottom: 15px;
+ font-weight: bold;
+ font-size: 18px;
+ color: #2c3e50;
+ }
  @media (max-width: 1480px) {
  :root { --w: 98vw; }
  .grid, .boulder-grid { grid-template-columns: 1fr; }
@@ -313,6 +320,13 @@
  <div class="input-row"><label>Tonnage Night</label><input type="number" id="ton_night" value="1417"></div>
  <div class="input-row"><label>FTD Tonnage Total</label><input type="number" id="ton_ftd" value="2353"></div>
  </div>
+ <h4>Summary Data</h4>
+ <div class="input-group">
+ <div class="input-row"><label>Boulder Dispatch QTY (tons)</label><input type="number" id="boulder_dispatch_ftd" value="2039"></div>
+ <div class="input-row"><label>Dispatch QTY (tons)</label><input type="number" id="dispatch_qty_ftd" value="1043"></div>
+ <div class="input-row"><label>Basic Revenue (Lkhs)</label><input type="number" step="0.01" id="basic_rev_ftd" value="4.80"></div>
+ <div class="input-row"><label>Total Revenue (Lkhs)</label><input type="number" step="0.01" id="total_rev_ftd" value="8.80"></div>
+ </div>
  <h4>Godown Stock (Tons)</h4>
  <div class="input-group">
  <div class="input-row"><label>10 MM</label><input type="number" id="stock_10mm" value="130"></div>
@@ -337,7 +351,23 @@
  <!-- REPORT OUTPUT -->
  <div class="report" id="report">
  <h1>DAILY OPERATIONS REPORT</h1>
- <div class="date">Date: <span id="today"></span></div>
+ <div class="summary-header">
+ SGX -MISSION -MIS<br>
+ Date: <span id="today"></span>
+ </div>
+ <div class="full-width">
+ <h2>EXECUTIVE SUMMARY</h2>
+ <table>
+ <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
+ <tr><td class="left">Mine Production</td><td id="sum_mine_ftd">2,612</td><td>50,453</td></tr>
+ <tr><td class="left">Boulder Dispatch QTY</td><td id="sum_boulder_ftd">2,039</td><td>34,796</td></tr>
+ <tr><td class="left">Plant Production</td><td id="sum_plant_ftd">1,865</td><td>31,987</td></tr>
+ <tr><td class="left">Dispatch QTY</td><td id="sum_dispatch_ftd">1,043</td><td>19,678</td></tr>
+ <tr><td class="left">Basic Revenue (in Lkhs)</td><td id="sum_basic_rev_ftd">₹4.80</td><td>₹82.20</td></tr>
+ <tr class="total"><td class="left">Total Revenue (In Lkhs)</td><td id="sum_total_rev_ftd">₹8.80</td><td>₹149.30</td></tr>
+ </table>
+ </div>
+ <div class="date"></div>
  <!-- Mine and Plant in 2-column 1-row grid -->
  <div class="grid">
  <div>
@@ -394,7 +424,7 @@
  <tr><td class="left">AP39WF2052</td><td id="r_trip_ap39wf2052_day">3</td><td id="r_trip_ap39wf2052_night">7</td><td id="r_trip_ap39wf2052_ftd">10</td><td>118</td></tr>
  <tr><td class="left">AP39WF2057</td><td id="r_trip_ap39wf2057_day">3</td><td id="r_trip_ap39wf2057_night">6</td><td id="r_trip_ap39wf2057_ftd">9</td><td>149</td></tr>
  <tr><td class="left">AP39WF2058</td><td id="r_trip_ap39wf2058_day">0</td><td id="r_trip_ap39wf2058_night">0</td><td id="r_trip_ap39wf2058_ftd">0</td><td>0</td></tr>
- <tr class="total"><td class="left">Total</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
+ <tr class="total"><td class="left">Total</td><td id="r_trips_day_total">39</td><td id="r_trips_night_total">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
  </table>
  </div>
  <div class="boulder-right">
@@ -446,12 +476,19 @@ function generateReport() {
  const plant = parseFloat(document.getElementById('plant_prod').value) || 0;
  const day = parseInt(document.getElementById('trips_day').value) || 0;
  const night = parseInt(document.getElementById('trips_night').value) || 0;
+ const boulder_dispatch = parseFloat(document.getElementById('boulder_dispatch_ftd').value) || 0;
+ const dispatch_qty = parseFloat(document.getElementById('dispatch_qty_ftd').value) || 0;
+ const basic_rev = parseFloat(document.getElementById('basic_rev_ftd').value) || 0;
+ const total_rev = parseFloat(document.getElementById('total_rev_ftd').value) || 0;
+ // Update trips day/night totals (fix for multiple elements)
+ const tripsDayElements = document.querySelectorAll('[id^="r_trips_day"]');
+ tripsDayElements.forEach(el => el.innerText = day);
+ const tripsNightElements = document.querySelectorAll('[id^="r_trips_night"]');
+ tripsNightElements.forEach(el => el.innerText = night);
+ document.getElementById('r_trips_ftd').innerText = day + night;
  // Update all fields
  document.getElementById('r_mine_prod').innerText = mine.toLocaleString();
  document.getElementById('r_plant_prod').innerText = plant.toLocaleString();
- document.getElementById('r_trips_day').innerHTML = [document.getElementById('r_trips_day_total'), document.getElementById('r_trips_day_vehicle')].map(el => el ? el.innerText = day : day);
- document.getElementById('r_trips_night').innerText = night;
- document.getElementById('r_trips_ftd').innerText = day + night;
  // Mine fields
  document.getElementById('r_compressors').innerText = document.getElementById('compressors').value;
  document.getElementById('r_nmr').innerText = document.getElementById('nmr').value;
@@ -497,9 +534,10 @@ function generateReport() {
  const dayVal = parseInt(document.getElementById(v.day).value) || 0;
  const nightVal = parseInt(document.getElementById(v.night).value) || 0;
  const ftdVal = dayVal + nightVal;
- document.getElementById(`r_trip_ap39${v.day.split('ap39')[1].split('_day')[0]}_day`).innerText = dayVal;
- document.getElementById(`r_trip_ap39${v.night.split('ap39')[1].split('_night')[0]}_night`).innerText = nightVal;
- document.getElementById(`r_trip_ap39${v.ftd.split('ap39')[1].split('_ftd')[0]}_ftd`).innerText = ftdVal;
+ const vehicleCode = v.day.split('_')[1]; // e.g., 'ap39uq0095'
+ document.getElementById(`r_trip_${vehicleCode}_day`).innerText = dayVal;
+ document.getElementById(`r_trip_${vehicleCode}_night`).innerText = nightVal;
+ document.getElementById(`r_trip_${vehicleCode}_ftd`).innerText = ftdVal;
  });
  // Tonnage
  document.getElementById('r_ton_day').innerText = document.getElementById('ton_day').value;
@@ -518,8 +556,15 @@ function generateReport() {
  document.getElementById('s_mine').innerText = mine.toLocaleString();
  document.getElementById('s_plant').innerText = plant.toLocaleString();
  document.getElementById('s_total_ftd').innerText = (mine + plant).toLocaleString();
+ // Executive Summary
+ document.getElementById('sum_mine_ftd').innerText = mine.toLocaleString();
+ document.getElementById('sum_plant_ftd').innerText = plant.toLocaleString();
+ document.getElementById('sum_boulder_ftd').innerText = boulder_dispatch.toLocaleString();
+ document.getElementById('sum_dispatch_ftd').innerText = dispatch_qty.toLocaleString();
+ document.getElementById('sum_basic_rev_ftd').innerText = '₹' + basic_rev.toFixed(2);
+ document.getElementById('sum_total_rev_ftd').innerText = '₹' + total_rev.toFixed(2);
  // Today's date
- const today = '13 December 2025';
+ const today = '20 November 2025';
  document.getElementById('today').innerText = today;
 }
 // Auto-update on input change (optional)
@@ -528,7 +573,6 @@ document.querySelectorAll('input').forEach(input => {
 });
 // Run once on load
 generateReport();
-
 function shareReport() {
   const element = document.getElementById('report');
   const opt = {
