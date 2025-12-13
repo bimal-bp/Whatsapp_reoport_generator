@@ -12,6 +12,7 @@
  --blue: #2980b9;
  --border: #000;
  --gray: #f8f9fa;
+ --green: #27ae60;
  }
  body {
  background: #ecf0f1;
@@ -77,6 +78,12 @@
  background: #d35400;
  transform: translateY(-2px);
  }
+ .achievement-btn {
+ background: var(--green);
+ }
+ .achievement-btn:hover {
+ background: #229954;
+ }
  .print-btn {
  background: var(--blue);
  }
@@ -117,6 +124,9 @@
  text-align: center;
  border-radius: 6px 6px 0 0;
  font-size: 20px;
+ }
+ h2.achievement {
+ background: var(--green);
  }
  h3 {
  color: var(--orange);
@@ -366,6 +376,7 @@
  </div>
  <center>
  <button onclick="generateReport()">Generate / Update Report</button>
+ <button class="achievement-btn" onclick="generateAchievement()">Update Achievement</button>
  <button class="print-btn" onclick="window.print()">Print Report</button>
  <button class="share-btn" onclick="shareReport()">Capture & Share to WhatsApp</button>
  </center>
@@ -389,7 +400,8 @@
  <tr class="total"><td class="left">Total Revenue (In Lkhs)</td><td id="sum_total_rev_ftd">₹8.80</td><td>₹149.30</td></tr>
  </table>
  </div>
- <div class="full-width">
+ <div class="grid">
+ <div>
  <h2>MACHINERY AVAILABILITY</h2>
  <table>
  <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>Performance %</th></tr>
@@ -399,8 +411,8 @@
  <tr><td class="left">Rental Vehicle Available</td><td id="r_rental_vehicle">2</td><td id="r_rental_perf">72</td></tr>
  </table>
  </div>
- <div class="full-width">
- <h2>ACHIEVEMENT %</h2>
+ <div>
+ <h2 class="achievement">ACHIEVEMENT %</h2>
  <table>
  <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
  <tr><td class="left">Quarry</td><td id="r_quarry_ftd">68%</td><td id="r_quarry_mtd">74%</td></tr>
@@ -408,6 +420,7 @@
  <tr><td class="left">Machinery</td><td id="r_machinery_ftd">68%</td><td id="r_machinery_mtd">75%</td></tr>
  <tr><td class="left">Dispatch</td><td id="r_dispatch_ftd">43%</td><td id="r_dispatch_mtd">62%</td></tr>
  </table>
+ </div>
  </div>
  <div class="date"></div>
  <!-- Mine and Plant in 2-column 1-row grid -->
@@ -500,19 +513,12 @@
  </div>
  </div>
  </div>
- <div class="full-width">
- <h2>PRODUCTION SUMMARY</h2>
- <table>
- <tr class="subhead"><th class="left"></th><th>Mine Production</th><th>Plant Production</th><th>Total Production</th></tr>
- <tr><td class="left">FTD</td><td id="s_mine">2,612</td><td id="s_plant">1,865</td><td class="total" id="s_total_ftd">—</td></tr>
- <tr class="total"><td class="left">MTD</td><td>50,453</td><td>31,987</td><td>82,440</td></tr>
- </table>
- </div>
  </div>
 </div>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
 function generateReport() {
+ generateAchievement();
  // Get values
  const mine = parseFloat(document.getElementById('mine_prod').value) || 0;
  const plant = parseFloat(document.getElementById('plant_prod').value) || 0;
@@ -595,9 +601,6 @@ function generateReport() {
  document.getElementById('r_stock_gsb').innerText = document.getElementById('stock_gsb').value;
  document.getElementById('r_stock_total').innerText = document.getElementById('stock_total').value.toLocaleString();
  // Summary
- document.getElementById('s_mine').innerText = mine.toLocaleString();
- document.getElementById('s_plant').innerText = plant.toLocaleString();
- document.getElementById('s_total_ftd').innerText = (mine + plant).toLocaleString();
  // Executive Summary
  document.getElementById('sum_mine_ftd').innerText = mine.toLocaleString();
  document.getElementById('sum_plant_ftd').innerText = plant.toLocaleString();
@@ -605,6 +608,11 @@ function generateReport() {
  document.getElementById('sum_dispatch_ftd').innerText = dispatch_qty.toLocaleString();
  document.getElementById('sum_basic_rev_ftd').innerText = '₹' + basic_rev.toFixed(2);
  document.getElementById('sum_total_rev_ftd').innerText = '₹' + total_rev.toFixed(2);
+ // Today's date
+ const today = '13 December 2025';
+ document.getElementById('today').innerText = today;
+}
+function generateAchievement() {
  // Machinery Availability
  document.getElementById('r_tipper_running').innerText = document.getElementById('tippers_running').value;
  document.getElementById('r_tipper_perf').innerText = document.getElementById('tippers_perf').value;
@@ -623,9 +631,6 @@ function generateReport() {
  document.getElementById('r_machinery_mtd').innerText = document.getElementById('machinery_mtd').value + '%';
  document.getElementById('r_dispatch_ftd').innerText = document.getElementById('dispatch_ftd').value + '%';
  document.getElementById('r_dispatch_mtd').innerText = document.getElementById('dispatch_mtd').value + '%';
- // Today's date
- const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
- document.getElementById('today').innerText = today;
 }
 // Auto-update on input change (optional)
 document.querySelectorAll('input').forEach(input => {
