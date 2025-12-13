@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boulder Transportation MIS</title>
+<title>SGX - MISSION - MIS</title>
 <style>
   body{
     font-family: Segoe UI, Arial, Calibri, sans-serif;
@@ -21,6 +21,10 @@
     display:flex;
     gap:12px;
   }
+  .left70{ width:70%; }
+  .right30{ width:30%; }
+  .left50{ width:50%; }
+  .right50{ width:50%; }
   .left60{ width:60%; }
   .right40{ width:40%; }
   table{
@@ -73,7 +77,7 @@
   @media(max-width:900px){
     .container{ width:100%; }
     .flex{ flex-direction:column; }
-    .left60,.right40{ width:100%; }
+    .left70,.right30,.left50,.right50,.left60,.right40{ width:100%; }
   }
   @media print{
     body{ background:#fff; }
@@ -85,49 +89,141 @@
 <!-- ================= HEADER ================= -->
 <table>
   <tr>
-    <th class="header left">BOULDER TRANSPORTATION - MIS</th>
-    <th class="header right">Date : 20-11-2025</th>
+    <th class="header left">SGX - MISSION - MIS</th>
+    <th class="header right">Date : 13-12-2025</th>
   </tr>
 </table>
+<!-- ================= SUMMARY + MACHINERY ================= -->
 <div class="flex">
-<!-- ================= LEFT 60% ================= -->
-<div class="left60">
-<!-- SUMMARY -->
+  <div class="left70">
+    <!-- SUMMARY -->
+    <table class="thick">
+      <tr>
+        <th></th>
+        <th class="orangeText">FTD</th>
+        <th class="orangeText">MTD</th>
+      </tr>
+      <tr>
+        <td class="left"><b>Mine Production</b></td>
+        <td>2612.8</td>
+        <td>50,453</td>
+      </tr>
+      <tr>
+        <td class="left"><b>Boulder Dispatch QTY</b></td>
+        <td>2039</td>
+        <td>34,796</td>
+      </tr>
+      <tr>
+        <td class="left"><b>Plant Production</b></td>
+        <td>1865</td>
+        <td>31,987</td>
+      </tr>
+      <tr>
+        <td class="left"><b>Dispatch QTY</b></td>
+        <td>1043</td>
+        <td>19,678</td>
+      </tr>
+      <tr>
+        <td class="left"><b>Basic Revenue (In Lkhs)</b></td>
+        <td>4.8</td>
+        <td>82.2</td>
+      </tr>
+      <tr>
+        <td class="left"><b>Total Revenue (In Lkhs)</b></td>
+        <td>8.8</td>
+        <td>149.3</td>
+      </tr>
+    </table>
+  </div>
+  <div class="right30">
+    <!-- MACHINERY -->
+    <table>
+      <tr><th colspan="2" class="subheader">Machinery Availability</th></tr>
+      <tr><td class="left">Tippers</td><td class="orangeText">9</td></tr>
+      <tr><td class="left">Excavator</td><td class="orangeText">4</td></tr>
+      <tr><td class="left">Loaders</td><td class="orangeText">2</td></tr>
+    </table>
+  </div>
+</div>
+<!-- ================= OPERATIONS ================= -->
+<div class="flex">
+  <div class="left50">
+    <!-- MINE OPERATION -->
+    <table>
+      <tr><th colspan="3" class="subheader">Mine Operation</th></tr>
+      <tr><th></th><th>FTD</th><th>MTD</th></tr>
+      <tr><td class="left">No. of Compressors</td><td>9</td><td>183</td></tr>
+      <tr><td class="left">No. of NMR</td><td>9</td><td>183</td></tr>
+      <tr><td class="left">No. of Holes</td><td>600</td><td>11,702</td></tr>
+      <tr><td class="left">Total Feetage</td><td>3,266</td><td>63,066</td></tr>
+      <tr><td class="left">Production</td><td>2,612</td><td>50,453</td></tr>
+      <tr><td class="left">% of Recovery</td><td>83%</td><td>83%</td></tr>
+      <tr><td class="left">% of Breaking</td><td>23%</td><td>20%</td></tr>
+      <tr><td class="left">Remark</td><td colspan="2" class="left">Staggered Blasting Pattern</td></tr>
+    </table>
+  </div>
+  <div class="right50">
+    <!-- PLANT OPERATION -->
+    <table>
+      <tr><th colspan="3" class="subheader">Plant Operation</th></tr>
+      <tr><th></th><th>FTD</th><th>MTD</th></tr>
+      <tr><td class="left">Production</td><td>1865</td><td>31,987</td></tr>
+      <tr><td class="left">Running Hrs.</td><td>10.2</td><td>169.9</td></tr>
+      <tr><td class="left">TPH</td><td>183</td><td>188</td></tr>
+      <tr><td class="left">Maintenance Hrs</td><td>3.5</td><td>64</td></tr>
+      <tr><td class="left">Breakdown Hrs</td><td>0</td><td>6</td></tr>
+      <tr><td class="left">Power Cut Hrs</td><td>3.8</td><td>95.6</td></tr>
+      <tr><td class="left">Boulder Jam Hrs</td><td>0.5</td><td>20.9</td></tr>
+      <tr><td class="left">No Feed Hrs</td><td>2.5</td><td>34</td></tr>
+    </table>
+  </div>
+</div>
+<!-- ================= BOULDER TRANSPORTATION ================= -->
 <table class="thick">
-  <tr>
-    <th></th>
-    <th>Day</th>
-    <th>Night</th>
-    <th>FTD</th>
-    <th>MTD</th>
-  </tr>
-  <tr>
-    <td class="left"><b>Trips</b></td>
-    <td>39</td>
-    <td>54</td>
-    <td>93</td>
-    <td>1,368</td>
-  </tr>
-  <tr>
-    <td class="left"><b>Tonnage</b></td>
-    <td>936</td>
-    <td>1,417</td>
-    <td>2,353</td>
-    <td>32,757</td>
-  </tr>
+  <tr><th colspan="5" class="subheader">Boulder Transportation</th></tr>
+  <tr><th></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
+  <tr><td class="left"><b>Trips</b></td><td>39</td><td>54</td><td>93</td><td>1,368</td></tr>
+  <tr><td class="left"><b>Tonnage</b></td><td>936</td><td>1,417</td><td>2,353</td><td>32,757</td></tr>
 </table>
-<!-- VEHICLE WISE -->
+<!-- ================= PRODUCT + GODOWN ================= -->
+<div class="flex">
+  <div class="left60">
+    <!-- PRODUCTION -->
+    <table>
+      <tr><th colspan="3" class="subheader">Production</th></tr>
+      <tr><th>Material</th><th>FTD</th><th>MTD</th></tr>
+      <tr><td class="left">10 MM</td><td>381.6</td><td>3,722.4</td></tr>
+      <tr><td class="left">20 MM</td><td>593.6</td><td>5,790.4</td></tr>
+      <tr><td class="left">V-Sand</td><td>296.8</td><td>2,895.2</td></tr>
+      <tr><td class="left">Rivo Sand</td><td>763.2</td><td>7,444.8</td></tr>
+      <tr><td class="left">Slurry</td><td>84.8</td><td>827.2</td></tr>
+      <tr class="total">
+        <td class="left"><b>Total</b></td>
+        <td><b>2120</b></td>
+        <td><b>20,680</b></td>
+      </tr>
+    </table>
+  </div>
+  <div class="right40">
+    <!-- GODOWN STOCK -->
+    <table>
+      <tr><th colspan="2" class="subheader orangeText center">Godown Stock</th></tr>
+      <tr><td class="left">10 MM</td><td>130</td></tr>
+      <tr><td class="left">20 MM</td><td>4,250</td></tr>
+      <tr><td class="left">Rivo Sand</td><td>18,420</td></tr>
+      <tr><td class="left">Railway Ballast</td><td>2,000</td></tr>
+      <tr><td class="left">VSI</td><td>17,235</td></tr>
+      <tr class="total">
+        <td class="left bigTotal"><b>Total</b></td>
+        <td class="bigTotal"><b>42,035</b></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<!-- ================= VEHICLE WISE TRANSPORT ================= -->
 <table>
-  <tr>
-    <th class="subheader" colspan="5">Vehicle Wise Trips</th>
-  </tr>
-  <tr>
-    <th>Vehicle No</th>
-    <th>Day</th>
-    <th>Night</th>
-    <th>FTD</th>
-    <th>MTD</th>
-  </tr>
+  <tr><th colspan="5" class="subheader">Vehicle Wise Trips</th></tr>
+  <tr><th>Vehicle No</th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
   <tr><td class="left">AP39UQ0095</td><td>0</td><td>0</td><td>0</td><td>57</td></tr>
   <tr><td class="left">AP39UQ0097</td><td>5</td><td>5</td><td>10</td><td>95</td></tr>
   <tr><td class="left">AP39UW9880</td><td>6</td><td>6</td><td>12</td><td>152</td></tr>
@@ -148,51 +244,6 @@
     <td><b>1,368</b></td>
   </tr>
 </table>
-</div>
-<!-- ================= RIGHT 40% ================= -->
-<div class="right40">
-<!-- PRODUCTION -->
-<table>
-  <tr>
-    <th class="subheader" colspan="3">Production</th>
-  </tr>
-  <tr>
-    <th>Material</th>
-    <th>FTD</th>
-    <th>MTD</th>
-  </tr>
-  <tr><td class="left">10 MM</td><td>381.6</td><td>3,722.4</td></tr>
-  <tr><td class="left">20 MM</td><td>593.6</td><td>5,790.4</td></tr>
-  <tr><td class="left">V-Sand</td><td>296.8</td><td>2,895.2</td></tr>
-  <tr><td class="left">Railway Ballast</td><td></td><td></td></tr>
-  <tr><td class="left">40 MM</td><td></td><td></td></tr>
-  <tr><td class="left">Rivo Sand</td><td>763.2</td><td>7,444.8</td></tr>
-  <tr><td class="left">Slurry</td><td>84.8</td><td>827.2</td></tr>
-  <tr class="total">
-    <td class="left"><b>Total</b></td>
-    <td><b>2,120</b></td>
-    <td><b>20,680</b></td>
-  </tr>
-</table>
-<!-- GODOWN STOCK -->
-<table>
-  <tr>
-    <th colspan="2" class="subheader orangeText center">Godown Stock</th>
-  </tr>
-  <tr><td class="left">10 MM</td><td>130</td></tr>
-  <tr><td class="left">20 MM</td><td>4,250</td></tr>
-  <tr><td class="left">Rivo Sand</td><td>18,420</td></tr>
-  <tr><td class="left">Railway Ballast</td><td>2,000</td></tr>
-  <tr><td class="left">40 MM</td><td></td></tr>
-  <tr><td class="left">VSI</td><td>17,235</td></tr>
-  <tr><td class="left">GSB</td><td></td></tr>
-  <tr>
-    <td class="left bigTotal"><b>Total</b></td>
-    <td class="bigTotal"><b>42,035</b></td>
-  </tr>
-</table>
-</div>
-</div>
 </div>
 </body>
 </html>
