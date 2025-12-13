@@ -338,6 +338,28 @@
  <div class="input-row"><label>GSB</label><input type="number" id="stock_gsb" value="0"></div>
  <div class="input-row"><label>Total Stock</label><input type="number" id="stock_total" value="42035"></div>
  </div>
+ <h4>Machinery Availability</h4>
+ <div class="input-group">
+ <div class="input-row"><label>Tippers Running</label><input type="number" id="tippers_running" value="5"></div>
+ <div class="input-row"><label>Tippers Performance %</label><input type="number" id="tippers_perf" value="115"></div>
+ <div class="input-row"><label>Excavator Running</label><input type="number" id="excavator_running" value="2"></div>
+ <div class="input-row"><label>Excavator Performance %</label><input type="number" id="excavator_perf" value="71"></div>
+ <div class="input-row"><label>Loader Running</label><input type="number" id="loader_running" value="1"></div>
+ <div class="input-row"><label>Loader Performance %</label><input type="number" id="loader_perf" value="65"></div>
+ <div class="input-row"><label>Rental Vehicle Available</label><input type="number" id="rental_vehicle" value="2"></div>
+ <div class="input-row"><label>Rental Vehicle Performance %</label><input type="number" id="rental_perf" value="72"></div>
+ </div>
+ <h4>Achievement %</h4>
+ <div class="input-group">
+ <div class="input-row"><label>Quarry FTD %</label><input type="number" step="0.1" id="quarry_ftd" value="68"></div>
+ <div class="input-row"><label>Quarry MTD %</label><input type="number" step="0.1" id="quarry_mtd" value="74"></div>
+ <div class="input-row"><label>Plant FTD %</label><input type="number" step="0.1" id="plant_ftd" value="56"></div>
+ <div class="input-row"><label>Plant MTD %</label><input type="number" step="0.1" id="plant_mtd" value="68"></div>
+ <div class="input-row"><label>Machinery FTD %</label><input type="number" step="0.1" id="machinery_ftd" value="68"></div>
+ <div class="input-row"><label>Machinery MTD %</label><input type="number" step="0.1" id="machinery_mtd" value="75"></div>
+ <div class="input-row"><label>Dispatch FTD %</label><input type="number" step="0.1" id="dispatch_ftd" value="43"></div>
+ <div class="input-row"><label>Dispatch MTD %</label><input type="number" step="0.1" id="dispatch_mtd" value="62"></div>
+ </div>
  <h4>Remarks</h4>
  <div class="input-group">
  <div class="input-row"><label>Plant Operation Remark</label><input type="text" id="plant_remark" value="" class="full-width"></div>
@@ -365,6 +387,26 @@
  <tr><td class="left">Dispatch QTY</td><td id="sum_dispatch_ftd">1,043</td><td>19,678</td></tr>
  <tr><td class="left">Basic Revenue (in Lkhs)</td><td id="sum_basic_rev_ftd">₹4.80</td><td>₹82.20</td></tr>
  <tr class="total"><td class="left">Total Revenue (In Lkhs)</td><td id="sum_total_rev_ftd">₹8.80</td><td>₹149.30</td></tr>
+ </table>
+ </div>
+ <div class="full-width">
+ <h2>MACHINERY AVAILABILITY</h2>
+ <table>
+ <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>Performance %</th></tr>
+ <tr><td class="left">Tippers Running</td><td id="r_tipper_running">5</td><td id="r_tipper_perf">115</td></tr>
+ <tr><td class="left">Excavator Running</td><td id="r_excavator_running">2</td><td id="r_excavator_perf">71</td></tr>
+ <tr><td class="left">Loader Running</td><td id="r_loader_running">1</td><td id="r_loader_perf">65</td></tr>
+ <tr><td class="left">Rental Vehicle Available</td><td id="r_rental_vehicle">2</td><td id="r_rental_perf">72</td></tr>
+ </table>
+ </div>
+ <div class="full-width">
+ <h2>ACHIEVEMENT %</h2>
+ <table>
+ <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
+ <tr><td class="left">Quarry</td><td id="r_quarry_ftd">68%</td><td id="r_quarry_mtd">74%</td></tr>
+ <tr><td class="left">Plant</td><td id="r_plant_ftd">56%</td><td id="r_plant_mtd">68%</td></tr>
+ <tr><td class="left">Machinery</td><td id="r_machinery_ftd">68%</td><td id="r_machinery_mtd">75%</td></tr>
+ <tr><td class="left">Dispatch</td><td id="r_dispatch_ftd">43%</td><td id="r_dispatch_mtd">62%</td></tr>
  </table>
  </div>
  <div class="date"></div>
@@ -468,7 +510,7 @@
  </div>
  </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
 function generateReport() {
  // Get values
@@ -563,8 +605,26 @@ function generateReport() {
  document.getElementById('sum_dispatch_ftd').innerText = dispatch_qty.toLocaleString();
  document.getElementById('sum_basic_rev_ftd').innerText = '₹' + basic_rev.toFixed(2);
  document.getElementById('sum_total_rev_ftd').innerText = '₹' + total_rev.toFixed(2);
+ // Machinery Availability
+ document.getElementById('r_tipper_running').innerText = document.getElementById('tippers_running').value;
+ document.getElementById('r_tipper_perf').innerText = document.getElementById('tippers_perf').value;
+ document.getElementById('r_excavator_running').innerText = document.getElementById('excavator_running').value;
+ document.getElementById('r_excavator_perf').innerText = document.getElementById('excavator_perf').value;
+ document.getElementById('r_loader_running').innerText = document.getElementById('loader_running').value;
+ document.getElementById('r_loader_perf').innerText = document.getElementById('loader_perf').value;
+ document.getElementById('r_rental_vehicle').innerText = document.getElementById('rental_vehicle').value;
+ document.getElementById('r_rental_perf').innerText = document.getElementById('rental_perf').value;
+ // Achievement %
+ document.getElementById('r_quarry_ftd').innerText = document.getElementById('quarry_ftd').value + '%';
+ document.getElementById('r_quarry_mtd').innerText = document.getElementById('quarry_mtd').value + '%';
+ document.getElementById('r_plant_ftd').innerText = document.getElementById('plant_ftd').value + '%';
+ document.getElementById('r_plant_mtd').innerText = document.getElementById('plant_mtd').value + '%';
+ document.getElementById('r_machinery_ftd').innerText = document.getElementById('machinery_ftd').value + '%';
+ document.getElementById('r_machinery_mtd').innerText = document.getElementById('machinery_mtd').value + '%';
+ document.getElementById('r_dispatch_ftd').innerText = document.getElementById('dispatch_ftd').value + '%';
+ document.getElementById('r_dispatch_mtd').innerText = document.getElementById('dispatch_mtd').value + '%';
  // Today's date
- const today = '20 November 2025';
+ const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
  document.getElementById('today').innerText = today;
 }
 // Auto-update on input change (optional)
@@ -575,36 +635,44 @@ document.querySelectorAll('input').forEach(input => {
 generateReport();
 function shareReport() {
   const element = document.getElementById('report');
-  const opt = {
-    margin: 0.5,
-    filename: 'Daily-Operations-Report-' + new Date().toISOString().split('T')[0] + '.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-  html2pdf().set(opt).from(element).toPdf().output('blob').then(function (pdfBlob) {
-    const file = new File([pdfBlob], opt.filename, { type: 'application/pdf' });
-    const filesArray = [file];
-    if (navigator.canShare && navigator.canShare({ files: filesArray })) {
-      navigator.share({
-        title: 'Daily Operations Report - Mining & Plant',
-        text: 'Please find attached the daily operations report.',
-        files: filesArray
-      }).then(() => {
-        console.log('Shared successfully');
-      }).catch((error) => {
-        console.log('Error sharing', error);
-        // Fallback to download
-        html2pdf().set(opt).from(element).save();
-      });
-    } else {
-      // Fallback: download the PDF
-      html2pdf().set(opt).from(element).save();
-      alert('PDF downloaded. You can now share it manually via WhatsApp.');
-    }
+  const filename = 'Daily-Operations-Report-' + new Date().toISOString().split('T')[0] + '.png';
+  html2canvas(element, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    width: element.scrollWidth,
+    height: element.scrollHeight
+  }).then(canvas => {
+    canvas.toBlob(function(blob) {
+      const file = new File([blob], filename, { type: 'image/png' });
+      const filesArray = [file];
+      if (navigator.canShare && navigator.canShare({ files: filesArray })) {
+        navigator.share({
+          title: 'Daily Operations Report - Mining & Plant',
+          text: 'Please find attached the daily operations report image.',
+          files: filesArray
+        }).then(() => {
+          console.log('Shared successfully');
+        }).catch((error) => {
+          console.log('Error sharing', error);
+          // Fallback to download
+          const link = document.createElement('a');
+          link.download = filename;
+          link.href = canvas.toDataURL();
+          link.click();
+        });
+      } else {
+        // Fallback: download the image
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL();
+        link.click();
+        alert('Image downloaded. You can now share it manually via WhatsApp.');
+      }
+    }, 'image/png', 0.98);
   }).catch((error) => {
-    console.error('Error generating PDF:', error);
-    alert('Failed to generate PDF. Please try printing instead.');
+    console.error('Error generating image:', error);
+    alert('Failed to generate image. Please try printing instead.');
   });
 }
 </script>
