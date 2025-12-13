@@ -151,7 +151,7 @@
     }
     .total {
       background: #fef9e7 !important;
-      font-weight: native;
+      font-weight: bold;
       font-size: 16px;
     }
     .total td:last-child {
@@ -204,17 +204,6 @@
       border-radius: 6px;
       background: #fff;
     }
-    .capture-section {
-      background: #fff;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-    .capture-section:hover {
-      background: #f8f9fa;
-    }
     @media (max-width: 1480px) {
       :root { --w: 98vw; }
       .grid, .boulder-grid { grid-template-columns: 1fr; }
@@ -254,35 +243,32 @@
       }
     }
   </style>
-  <!-- Add html2canvas library for capturing DOM as image -->
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
 <div class="container">
   <div class="controls">
     <h3>Enter Today's (FTD) Data – Update & Click Generate</h3>
     <div class="input-group">
-      <div class="input-row"><label>Mine Production (tons)</label><input type="number" id="mine_prod" value="2612"></div>
+      <div class="input-row"><label>No. of Compressors</label><input type="number" id="compressors" value="9"></div>
+      <div class="input-row"><label>No. of NMR</label><input type="number" id="nmr" value="9"></div>
       <div class="input-row"><label>No. of Holes Drilled</label><input type="number" id="holes" value="600"></div>
       <div class="input-row"><label>Total Feetage (ft)</label><input type="number" id="feetage" value="3266"></div>
-      <div class="input-row"><label>No. of NMR</label><input type="number" id="nmr" value="9"></div>
-      <div class="input-row"><label>Running Hours</label><input type="number" step="0.1" id="run_hrs" value="10.2"></div>
-      <div class="input-row"><label>Maintenance Hours</label><input type="number" step="0.1" id="maint_hrs" value="3.5"></div>
-      <div class="input-row"><label>Breakdown Hours</label><input type="number" step="0.1" id="break_hrs" value="0"></div>
-      <div class="input-row"><label>Power Cut Hours</label><input type="number" step="0.1" id="power_hrs" value="3.8"></div>
+      <div class="input-row"><label>Mine Production (tons)</label><input type="number" id="mine_prod" value="2612"></div>
+      <div class="input-row"><label>% Recovery</label><input type="number" step="0.1" id="recovery" value="83"></div>
+      <div class="input-row"><label>% Breaking</label><input type="number" step="0.1" id="breaking" value="23"></div>
     </div>
     <div class="input-group">
       <div class="input-row"><label>Plant Production (tons)</label><input type="number" id="plant_prod" value="1865"></div>
-      <div class="input-row"><label>No. of Compressors Running</label><input type="number" id="compressors" value="9"></div>
+      <div class="input-row"><label>Running Hours</label><input type="number" step="0.1" id="run_hrs" value="10.2"></div>
       <div class="input-row"><label>TPH (Tons Per Hour)</label><input type="number" step="0.1" id="tph" value="183"></div>
+      <div class="input-row"><label>Maintenance Hours</label><input type="number" step="0.1" id="maint_hrs" value="3.5"></div>
+      <div class="input-row"><label>Breakdown Hours</label><input type="number" step="0.1" id="break_hrs" value="0"></div>
+      <div class="input-row"><label>Power Cut Hours</label><input type="number" step="0.1" id="power_hrs" value="3.8"></div>
       <div class="input-row"><label>Boulder Jam Hours</label><input type="number" step="0.1" id="jam_hrs" value="0.5"></div>
       <div class="input-row"><label>No Feed Hours</label><input type="number" step="0.1" id="nofeed_hrs" value="2.5"></div>
-      <div class="input-row"><label>% Recovery</label><input type="number" step="0.1" id="recovery" value="83"></div>
-      <div class="input-row"><label>% Breaking</label><input type="number" step="0.1" id="breaking" value="23"></div>
       <div class="input-row"><label>Trips - Day Shift</label><input type="number" id="trips_day" value="39"></div>
       <div class="input-row"><label>Trips - Night Shift</label><input type="number" id="trips_night" value="54"></div>
     </div>
-    <!-- New Input Group for Boulder Transportation Details -->
     <h4>Boulder Transportation - Production (FTD Tons)</h4>
     <div class="input-group">
       <div class="input-row"><label>10 MM</label><input type="number" step="0.1" id="prod_10mm" value="381.6"></div>
@@ -340,15 +326,11 @@
     </div>
     <h4>Remarks</h4>
     <div class="input-group">
-      <div class="input-row"><label>Mine Operation Remark</label><input type="text" id="mine_remark" value="Staggered Blasting Pattern Implemented" class="full-width"></div>
-    </div>
-    <div class="input-group">
-      <div class="input-row"><label>Plant Operation Remark</label><input type="text" id="plant_remark" value="Plant running smoothly with minor delays due to boulder jamming" class="full-width"></div>
+      <div class="input-row"><label>Plant Operation Remark</label><input type="text" id="plant_remark" value="" class="full-width"></div>
     </div>
     <center>
       <button onclick="generateReport()">Generate / Update Report</button>
       <button class="print-btn" onclick="window.print()">Print Report</button>
-      <button class="share-btn" onclick="captureAndShareFullReport()">Capture & Share Full Report</button>
     </center>
   </div>
   <!-- REPORT OUTPUT -->
@@ -357,113 +339,101 @@
     <div class="date">Date: <span id="today"></span></div>
     <!-- Mine and Plant in 2-column 1-row grid -->
     <div class="grid">
-      <div class="capture-section" onclick="captureAndShareSection('mine-op-section')">
+      <div>
         <h2>MINE OPERATION</h2>
-        <div id="mine-op-section">
-          <table>
-            <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
-            <tr><td class="left">Production (tons)</td><td id="r_mine_prod">2,612</td><td>50,453</td></tr>
-            <tr><td class="left">No. of Holes</td><td id="r_holes">600</td><td>11,702</td></tr>
-            <tr><td class="left">Total Feetage (ft)</td><td id="r_feetage">3,266</td><td>63,066</td></tr>
-            <tr><td class="left">No. of NMR</td><td id="r_nmr">9</td><td>183</td></tr>
-            <tr><td class="left">Running Hrs</td><td id="r_run_hrs">10.2</td><td>169.9</td></tr>
-            <tr><td class="left">Maintenance Hrs</td><td id="r_maint_hrs">3.5</td><td>64</td></tr>
-            <tr><td class="left">Breakdown Hrs</td><td id="r_break_hrs">0</td><td>6</td></tr>
-            <tr><td class="left">Power Cut Hrs</td><td id="r_power_hrs">3.8</td><td>95.6</td></tr>
-            <tr><td class="left">% Breaking</td><td id="r_breaking">23%</td><td>20%</td></tr>
-          </table>
-          <div class="remark">Remark: <span id="r_mine_remark">Staggered Blasting Pattern Implemented</span></div>
-        </div>
+        <table>
+          <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
+          <tr><td class="left">No. of Compressors</td><td id="r_compressors">9</td><td>183</td></tr>
+          <tr><td class="left">No. of NMR</td><td id="r_nmr">9</td><td>183</td></tr>
+          <tr><td class="left">No. of Holes</td><td id="r_holes">600</td><td>11,702</td></tr>
+          <tr><td class="left">Total Feetage (ft)</td><td id="r_feetage">3,266</td><td>63,066</td></tr>
+          <tr><td class="left">Production (tons)</td><td id="r_mine_prod">2,612</td><td>50,453</td></tr>
+          <tr><td class="left">% of Recovery</td><td id="r_recovery">83%</td><td>83%</td></tr>
+          <tr><td class="left">% of Breaking</td><td id="r_breaking">23%</td><td>20%</td></tr>
+        </table>
+        <div class="remark">Remark: Staggered Blasting Pattern</div>
       </div>
-      <div class="capture-section" onclick="captureAndShareSection('plant-op-section')">
+      <div>
         <h2>PLANT OPERATION</h2>
-        <div id="plant-op-section">
-          <table>
-            <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
-            <tr><td class="left">Production (tons)</td><td id="r_plant_prod">1,865</td><td>31,987</td></tr>
-            <tr><td class="left">No. of Compressors Running</td><td id="r_compressors">9</td><td>183</td></tr>
-            <tr><td class="left">TPH (Avg)</td><td id="r_tph">183</td><td>188</td></tr>
-            <tr><td class="left">Boulder Jam Hrs</td><td id="r_jam_hrs">0.5</td><td>20.9</td></tr>
-            <tr><td class="left">No Feed Hrs</td><td id="r_nofeed_hrs">2.5</td><td>34</td></tr>
-            <tr><td class="left">% of Recovery</td><td id="r_recovery">83%</td><td>83%</td></tr>
-          </table>
-          <div class="remark">Remark: <span id="r_plant_remark">Plant running smoothly with minor delays due to boulder jamming</span></div>
-        </div>
+        <table>
+          <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
+          <tr><td class="left">Production (tons)</td><td id="r_plant_prod">1,865</td><td>31,987</td></tr>
+          <tr><td class="left">Running Hrs.</td><td id="r_run_hrs">10.2</td><td>169.9</td></tr>
+          <tr><td class="left">TPH</td><td id="r_tph">183</td><td>188</td></tr>
+          <tr><td class="left">Maintenance Hrs</td><td id="r_maint_hrs">3.5</td><td>64</td></tr>
+          <tr><td class="left">Breakdown Hrs.</td><td id="r_break_hrs">0</td><td>6</td></tr>
+          <tr><td class="left">Power Cut Hrs.</td><td id="r_power_hrs">3.8</td><td>95.6</td></tr>
+          <tr><td class="left">Boulder Jam Hrs.</td><td id="r_jam_hrs">0.5</td><td>20.9</td></tr>
+          <tr><td class="left">No Feed Hrs.</td><td id="r_nofeed_hrs">2.5</td><td>34</td></tr>
+        </table>
+        <div class="remark">Remark: <span id="r_plant_remark"></span></div>
       </div>
     </div>
     <div class="boulder-grid">
-      <div class="boulder-left capture-section" onclick="captureAndShareSection('boulder-transport-section')">
+      <div class="boulder-left">
         <h2>BOULDER TRANSPORTATION</h2>
-        <div id="boulder-transport-section">
-          <!-- Summary Table -->
-          <table>
-            <tr class="subhead"><th class="left"></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
-            <tr><td class="left">Trips</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
-            <tr><td class="left">Tonnage</td><td id="r_ton_day">936</td><td id="r_ton_night">1,417</td><td id="r_ton_ftd">2,353</td><td>32,757</td></tr>
-          </table>
-          <!-- Vehicle-wise Table -->
-          <table>
-            <tr class="subhead"><th class="left">Vehicle No</th><th>Day</th><th>Night</th><th>FTD Total</th><th>MTD</th></tr>
-            <tr><td class="left">AP39UQ0095</td><td id="r_trip_ap39uq0095_day">0</td><td id="r_trip_ap39uq0095_night">0</td><td id="r_trip_ap39uq0095_ftd">0</td><td>57</td></tr>
-            <tr><td class="left">AP39UQ0097</td><td id="r_trip_ap39uq0097_day">5</td><td id="r_trip_ap39uq0097_night">5</td><td id="r_trip_ap39uq0097_ftd">10</td><td>95</td></tr>
-            <tr><td class="left">AP39UW9880</td><td id="r_trip_ap39uw9880_day">6</td><td id="r_trip_ap39uw9880_night">6</td><td id="r_trip_ap39uw9880_ftd">12</td><td>152</td></tr>
-            <tr><td class="left">AP39UW9881</td><td id="r_trip_ap39uw9881_day">5</td><td id="r_trip_ap39uw9881_night">4</td><td id="r_trip_ap39uw9881_ftd">9</td><td>135</td></tr>
-            <tr><td class="left">AP39UY4651</td><td id="r_trip_ap39uy4651_day">1</td><td id="r_trip_ap39uy4651_night">5</td><td id="r_trip_ap39uy4651_ftd">6</td><td>127</td></tr>
-            <tr><td class="left">AP39UY4652</td><td id="r_trip_ap39uy4652_day">5</td><td id="r_trip_ap39uy4652_night">6</td><td id="r_trip_ap39uy4652_ftd">11</td><td>144</td></tr>
-            <tr><td class="left">AP39WC0926</td><td id="r_trip_ap39wc0926_day">0</td><td id="r_trip_ap39wc0926_night">5</td><td id="r_trip_ap39wc0926_ftd">5</td><td>136</td></tr>
-            <tr><td class="left">AP39WC0927</td><td id="r_trip_ap39wc0927_day">5</td><td id="r_trip_ap39wc0927_night">4</td><td id="r_trip_ap39wc0927_ftd">9</td><td>101</td></tr>
-            <tr><td class="left">AP39WC0928</td><td id="r_trip_ap39wc0928_day">6</td><td id="r_trip_ap39wc0928_night">6</td><td id="r_trip_ap39wc0928_ftd">12</td><td>154</td></tr>
-            <tr><td class="left">AP39WF2052</td><td id="r_trip_ap39wf2052_day">3</td><td id="r_trip_ap39wf2052_night">7</td><td id="r_trip_ap39wf2052_ftd">10</td><td>118</td></tr>
-            <tr><td class="left">AP39WF2057</td><td id="r_trip_ap39wf2057_day">3</td><td id="r_trip_ap39wf2057_night">6</td><td id="r_trip_ap39wf2057_ftd">9</td><td>149</td></tr>
-            <tr><td class="left">AP39WF2058</td><td id="r_trip_ap39wf2058_day">0</td><td id="r_trip_ap39wf2058_night">0</td><td id="r_trip_ap39wf2058_ftd">0</td><td>0</td></tr>
-            <tr class="total"><td class="left">GSB Total</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
-          </table>
-        </div>
+        <!-- Summary Table -->
+        <table>
+          <tr class="subhead"><th class="left"></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
+          <tr><td class="left">Trips</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
+          <tr><td class="left">Tonnage</td><td id="r_ton_day">936</td><td id="r_ton_night">1,417</td><td id="r_ton_ftd">2,353</td><td>32,757</td></tr>
+        </table>
+        <!-- Vehicle-wise Table -->
+        <table>
+          <tr class="subhead"><th class="left">Vehicle No</th><th>Day</th><th>Night</th><th>FTD Total</th><th>MTD</th></tr>
+          <tr><td class="left">AP39UQ0095</td><td id="r_trip_ap39uq0095_day">0</td><td id="r_trip_ap39uq0095_night">0</td><td id="r_trip_ap39uq0095_ftd">0</td><td>57</td></tr>
+          <tr><td class="left">AP39UQ0097</td><td id="r_trip_ap39uq0097_day">5</td><td id="r_trip_ap39uq0097_night">5</td><td id="r_trip_ap39uq0097_ftd">10</td><td>95</td></tr>
+          <tr><td class="left">AP39UW9880</td><td id="r_trip_ap39uw9880_day">6</td><td id="r_trip_ap39uw9880_night">6</td><td id="r_trip_ap39uw9880_ftd">12</td><td>152</td></tr>
+          <tr><td class="left">AP39UW9881</td><td id="r_trip_ap39uw9881_day">5</td><td id="r_trip_ap39uw9881_night">4</td><td id="r_trip_ap39uw9881_ftd">9</td><td>135</td></tr>
+          <tr><td class="left">AP39UY4651</td><td id="r_trip_ap39uy4651_day">1</td><td id="r_trip_ap39uy4651_night">5</td><td id="r_trip_ap39uy4651_ftd">6</td><td>127</td></tr>
+          <tr><td class="left">AP39UY4652</td><td id="r_trip_ap39uy4652_day">5</td><td id="r_trip_ap39uy4652_night">6</td><td id="r_trip_ap39uy4652_ftd">11</td><td>144</td></tr>
+          <tr><td class="left">AP39WC0926</td><td id="r_trip_ap39wc0926_day">0</td><td id="r_trip_ap39wc0926_night">5</td><td id="r_trip_ap39wc0926_ftd">5</td><td>136</td></tr>
+          <tr><td class="left">AP39WC0927</td><td id="r_trip_ap39wc0927_day">5</td><td id="r_trip_ap39wc0927_night">4</td><td id="r_trip_ap39wc0927_ftd">9</td><td>101</td></tr>
+          <tr><td class="left">AP39WC0928</td><td id="r_trip_ap39wc0928_day">6</td><td id="r_trip_ap39wc0928_night">6</td><td id="r_trip_ap39wc0928_ftd">12</td><td>154</td></tr>
+          <tr><td class="left">AP39WF2052</td><td id="r_trip_ap39wf2052_day">3</td><td id="r_trip_ap39wf2052_night">7</td><td id="r_trip_ap39wf2052_ftd">10</td><td>118</td></tr>
+          <tr><td class="left">AP39WF2057</td><td id="r_trip_ap39wf2057_day">3</td><td id="r_trip_ap39wf2057_night">6</td><td id="r_trip_ap39wf2057_ftd">9</td><td>149</td></tr>
+          <tr><td class="left">AP39WF2058</td><td id="r_trip_ap39wf2058_day">0</td><td id="r_trip_ap39wf2058_night">0</td><td id="r_trip_ap39wf2058_ftd">0</td><td>0</td></tr>
+          <tr class="total"><td class="left">Total</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
+        </table>
       </div>
       <div class="boulder-right">
-        <div class="boxed capture-section" onclick="captureAndShareSection('production-section')">
+        <div class="boxed">
           <h3>Production</h3>
-          <div id="production-section">
-            <table>
-              <tr class="subhead"><th class="left">Product</th><th>FTD</th><th>MTD</th></tr>
-              <tr><td class="left">10 MM</td><td id="r_prod_10mm">381.6</td><td>3722.4</td></tr>
-              <tr><td class="left">20 MM</td><td id="r_prod_20mm">593.6</td><td>5790.4</td></tr>
-              <tr><td class="left">V-Sand</td><td id="r_prod_vsand">296.8</td><td>2895.2</td></tr>
-              <tr><td class="left">Railway Ballast</td><td id="r_prod_railballast">0</td><td>57</td></tr>
-              <tr><td class="left">40 MM</td><td id="r_prod_40mm">0</td><td>0</td></tr>
-              <tr><td class="left">Rivo Sand</td><td id="r_prod_rivosand">763.2</td><td>7444.8</td></tr>
-              <tr><td class="left">Slurry</td><td id="r_prod_slurry">84.8</td><td>827.2</td></tr>
-              <tr class="total"><td class="left">Total</td><td id="r_prod_total">2120</td><td>20,680</td></tr>
-            </table>
-          </div>
+          <table>
+            <tr class="subhead"><th class="left">Product</th><th>FTD</th><th>MTD</th></tr>
+            <tr><td class="left">10 MM</td><td id="r_prod_10mm">381.6</td><td>3722.4</td></tr>
+            <tr><td class="left">20 MM</td><td id="r_prod_20mm">593.6</td><td>5790.4</td></tr>
+            <tr><td class="left">V-Sand</td><td id="r_prod_vsand">296.8</td><td>2895.2</td></tr>
+            <tr><td class="left">Railway Ballast</td><td id="r_prod_railballast">0</td><td>57</td></tr>
+            <tr><td class="left">40 MM</td><td id="r_prod_40mm">0</td><td>0</td></tr>
+            <tr><td class="left">Rivo Sand</td><td id="r_prod_rivosand">763.2</td><td>7444.8</td></tr>
+            <tr><td class="left">Slurry</td><td id="r_prod_slurry">84.8</td><td>827.2</td></tr>
+            <tr class="total"><td class="left">Total</td><td id="r_prod_total">2120</td><td>20,680</td></tr>
+          </table>
         </div>
-        <div class="boxed capture-section" onclick="captureAndShareSection('stock-section')">
+        <div class="boxed">
           <h3>Godown Stock</h3>
-          <div id="stock-section">
-            <table>
-              <tr class="subhead"><th class="left">Material</th><th>Quantity</th></tr>
-              <tr><td class="left">10 MM</td><td id="r_stock_10mm">130</td></tr>
-              <tr><td class="left">20 MM</td><td id="r_stock_20mm">4250</td></tr>
-              <tr><td class="left">Rivo Sand</td><td id="r_stock_rivosand">18420</td></tr>
-              <tr><td class="left">Railway Ballast</td><td id="r_stock_railballast">2000</td></tr>
-              <tr><td class="left">40 MM</td><td id="r_stock_40mm">0</td></tr>
-              <tr><td class="left">VSI</td><td id="r_stock_vsi">17235</td></tr>
-              <tr><td class="left">GSB</td><td id="r_stock_gsb">0</td></tr>
-              <tr class="total"><td class="left">Total</td><td id="r_stock_total">42,035</td></tr>
-            </table>
-          </div>
+          <table>
+            <tr class="subhead"><th class="left">Material</th><th>Quantity</th></tr>
+            <tr><td class="left">10 MM</td><td id="r_stock_10mm">130</td></tr>
+            <tr><td class="left">20 MM</td><td id="r_stock_20mm">4250</td></tr>
+            <tr><td class="left">Rivo Sand</td><td id="r_stock_rivosand">18420</td></tr>
+            <tr><td class="left">Railway Ballast</td><td id="r_stock_railballast">2000</td></tr>
+            <tr><td class="left">40 MM</td><td id="r_stock_40mm">0</td></tr>
+            <tr><td class="left">VSI</td><td id="r_stock_vsi">17235</td></tr>
+            <tr><td class="left">GSB</td><td id="r_stock_gsb">0</td></tr>
+            <tr class="total"><td class="left">Total</td><td id="r_stock_total">42,035</td></tr>
+          </table>
         </div>
       </div>
     </div>
-    <div class="capture-section full-width" onclick="captureAndShareSection('summary-section')">
+    <div class="full-width">
       <h2>PRODUCTION SUMMARY</h2>
-      <div id="summary-section">
-        <table>
-          <tr class="subhead"><th class="left"></th><th>Mine Production</th><th>Plant Production</th><th>Total Production</th></tr>
-          <tr><td class="left">FTD</td><td id="s_mine">2,612</td><td id="s_plant">1,865</td><td class="total" id="s_total_ftd">—</td></tr>
-          <tr class="total"><td class="left">MTD</td><td>50,453</td><td>31,987</td><td>82,440</td></tr>
-        </table>
-      </div>
+      <table>
+        <tr class="subhead"><th class="left"></th><th>Mine Production</th><th>Plant Production</th><th>Total Production</th></tr>
+        <tr><td class="left">FTD</td><td id="s_mine">2,612</td><td id="s_plant">1,865</td><td class="total" id="s_total_ftd">—</td></tr>
+        <tr class="total"><td class="left">MTD</td><td>50,453</td><td>31,987</td><td>82,440</td></tr>
+      </table>
     </div>
   </div>
 </div>
@@ -477,25 +447,25 @@ function generateReport() {
   // Update all fields
   document.getElementById('r_mine_prod').innerText = mine.toLocaleString();
   document.getElementById('r_plant_prod').innerText = plant.toLocaleString();
-  document.getElementById('r_trips_day').innerText = day;
+  document.getElementById('r_trips_day').innerHTML = [document.getElementById('r_trips_day_total'), document.getElementById('r_trips_day_vehicle')].map(el => el ? el.innerText = day : day);
   document.getElementById('r_trips_night').innerText = night;
   document.getElementById('r_trips_ftd').innerText = day + night;
-  // Other fields
+  // Mine fields
+  document.getElementById('r_compressors').innerText = document.getElementById('compressors').value;
+  document.getElementById('r_nmr').innerText = document.getElementById('nmr').value;
   document.getElementById('r_holes').innerText = document.getElementById('holes').value;
   document.getElementById('r_feetage').innerText = document.getElementById('feetage').value;
-  document.getElementById('r_nmr').innerText = document.getElementById('nmr').value;
+  document.getElementById('r_recovery').innerText = document.getElementById('recovery').value + '%';
+  document.getElementById('r_breaking').innerText = document.getElementById('breaking').value + '%';
+  // Plant fields
   document.getElementById('r_run_hrs').innerText = document.getElementById('run_hrs').value;
+  document.getElementById('r_tph').innerText = document.getElementById('tph').value;
   document.getElementById('r_maint_hrs').innerText = document.getElementById('maint_hrs').value;
   document.getElementById('r_break_hrs').innerText = document.getElementById('break_hrs').value;
   document.getElementById('r_power_hrs').innerText = document.getElementById('power_hrs').value;
-  document.getElementById('r_compressors').innerText = document.getElementById('compressors').value;
-  document.getElementById('r_tph').innerText = document.getElementById('tph').value;
   document.getElementById('r_jam_hrs').innerText = document.getElementById('jam_hrs').value;
   document.getElementById('r_nofeed_hrs').innerText = document.getElementById('nofeed_hrs').value;
-  document.getElementById('r_recovery').innerText = document.getElementById('recovery').value + '%';
-  document.getElementById('r_breaking').innerText = document.getElementById('breaking').value + '%';
   // Remarks
-  document.getElementById('r_mine_remark').innerText = document.getElementById('mine_remark').value;
   document.getElementById('r_plant_remark').innerText = document.getElementById('plant_remark').value;
   // Boulder Transportation - Production
   document.getElementById('r_prod_10mm').innerText = document.getElementById('prod_10mm').value;
@@ -524,9 +494,10 @@ function generateReport() {
   vehicles.forEach(v => {
     const dayVal = parseInt(document.getElementById(v.day).value) || 0;
     const nightVal = parseInt(document.getElementById(v.night).value) || 0;
-    document.getElementById(`r_trip_${v.day.split('_')[1]}_day`).innerText = dayVal;
-    document.getElementById(`r_trip_${v.night.split('_')[1]}_night`).innerText = nightVal;
-    document.getElementById(`r_trip_${v.ftd.split('_')[1]}_ftd`).innerText = dayVal + nightVal;
+    const ftdVal = dayVal + nightVal;
+    document.getElementById(`r_trip_ap39${v.day.split('ap39')[1].split('_day')[0]}_day`).innerText = dayVal;
+    document.getElementById(`r_trip_ap39${v.night.split('ap39')[1].split('_night')[0]}_night`).innerText = nightVal;
+    document.getElementById(`r_trip_ap39${v.ftd.split('ap39')[1].split('_ftd')[0]}_ftd`).innerText = ftdVal;
   });
   // Tonnage
   document.getElementById('r_ton_day').innerText = document.getElementById('ton_day').value;
@@ -546,81 +517,8 @@ function generateReport() {
   document.getElementById('s_plant').innerText = plant.toLocaleString();
   document.getElementById('s_total_ftd').innerText = (mine + plant).toLocaleString();
   // Today's date
-  const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+  const today = '13 December 2025';
   document.getElementById('today').innerText = today;
-}
-// Function to capture a section as image and share
-async function captureAndShareSection(sectionId) {
-  const element = document.getElementById(sectionId);
-  if (!element) {
-    alert('Section not found!');
-    return;
-  }
-  try {
-    const canvas = await html2canvas(element, {
-      scale: 3, // Increased for higher resolution and clarity
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#ffffff',
-      width: element.scrollWidth,
-      height: element.scrollHeight
-    });
-    const imageData = canvas.toDataURL('image/png');
-    const blob = await (await fetch(imageData)).blob();
-    await shareImage(blob, `${sectionId.replace('-section', '')}.png`);
-  } catch (error) {
-    console.error('Capture failed:', error);
-    alert('Capture failed. Try downloading instead.');
-    downloadImage(imageData, `${sectionId.replace('-section', '')}.png`);
-  }
-}
-// Function to capture full report
-async function captureAndShareFullReport() {
-  const element = document.getElementById('report');
-  try {
-    const canvas = await html2canvas(element, {
-      scale: 3, // Increased for higher resolution and clarity
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#ffffff',
-      width: element.scrollWidth,
-      height: element.scrollHeight
-    });
-    const imageData = canvas.toDataURL('image/png');
-    const blob = await (await fetch(imageData)).blob();
-    await shareImage(blob, 'full-report.png');
-  } catch (error) {
-    console.error('Capture failed:', error);
-    alert('Capture failed. Try downloading instead.');
-    downloadImage(imageData, 'full-report.png');
-  }
-}
-// Share image using Web Share API (works best on mobile)
-async function shareImage(blob, filename) {
-  if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: 'image/png' })] })) {
-    try {
-      await navigator.share({
-        title: 'Daily Operations Report',
-        text: 'Sharing report section/image',
-        files: [new File([blob], filename, { type: 'image/png' })]
-      });
-    } catch (error) {
-      if (error.name !== 'AbortError') {
-        console.error('Share failed:', error);
-        downloadImage(URL.createObjectURL(blob), filename);
-      }
-    }
-  } else {
-    // Fallback to download
-    downloadImage(URL.createObjectURL(blob), filename);
-  }
-}
-// Download image fallback
-function downloadImage(imageUrl, filename) {
-  const link = document.createElement('a');
-  link.download = filename;
-  link.href = imageUrl;
-  link.click();
 }
 // Auto-update on input change (optional)
 document.querySelectorAll('input').forEach(input => {
