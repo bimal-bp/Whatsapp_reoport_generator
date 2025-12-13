@@ -79,6 +79,12 @@
     .print-btn:hover {
       background: #1f618d;
     }
+    .share-btn {
+      background: #25D366;
+    }
+    .share-btn:hover {
+      background: #128C7E;
+    }
     .report {
       background: #fff;
       padding: 20px;
@@ -141,7 +147,7 @@
     }
     .total {
       background: #fef9e7 !important;
-      font-weight: bold;
+      font-weight: native;
       font-size: 16px;
     }
     .total td:last-child {
@@ -194,6 +200,17 @@
       border-radius: 6px;
       background: #fff;
     }
+    .capture-section {
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .capture-section:hover {
+      background: #f8f9fa;
+    }
     @media (max-width: 1480px) {
       :root { --w: 98vw; }
       .grid, .boulder-grid { grid-template-columns: 1fr; }
@@ -206,6 +223,8 @@
       button { display: none; }
     }
   </style>
+  <!-- Add html2canvas library for capturing DOM as image -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -291,16 +310,17 @@
     <center>
       <button onclick="generateReport()">Generate / Update Report</button>
       <button class="print-btn" onclick="window.print()">Print Report</button>
+      <button class="share-btn" onclick="captureAndShareFullReport()">Capture & Share Full Report</button>
     </center>
   </div>
   <!-- REPORT OUTPUT -->
   <div class="report" id="report">
     <h1>DAILY OPERATIONS REPORT</h1>
     <div class="date">Date: <span id="today"></span></div>
-    <div class="grid">
-      <!-- MINE OPERATION -->
-      <div>
-        <h2>MINE OPERATION</h2>
+    <!-- Add clickable sections for capture -->
+    <div class="capture-section" onclick="captureAndShareSection('mine-op-section')">
+      <h2>MINE OPERATION</h2>
+      <div id="mine-op-section">
         <table>
           <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
           <tr><td class="left">Production (tons)</td><td id="r_mine_prod">2,612</td><td>50,453</td></tr>
@@ -315,9 +335,10 @@
         </table>
         <div class="remark">Remark: Staggered Blasting Pattern Implemented</div>
       </div>
-      <!-- PLANT OPERATION -->
-      <div>
-        <h2>PLANT OPERATION</h2>
+    </div>
+    <div class="capture-section" onclick="captureAndShareSection('plant-op-section')">
+      <h2>PLANT OPERATION</h2>
+      <div id="plant-op-section">
         <table>
           <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
           <tr><td class="left">Production (tons)</td><td id="r_plant_prod">1,865</td><td>31,987</td></tr>
@@ -331,67 +352,72 @@
       </div>
     </div>
     <div class="boulder-grid">
-      <div class="boulder-left">
+      <div class="boulder-left capture-section" onclick="captureAndShareSection('boulder-transport-section')">
         <h2>BOULDER TRANSPORTATION</h2>
-        <!-- Summary Table -->
-        <table>
-          <tr class="subhead"><th class="left"></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
-          <tr><td class="left">Trips</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
-          <tr><td class="left">Tonnage</td><td id="r_ton_day">936</td><td id="r_ton_night">1,417</td><td id="r_ton_ftd">2,353</td><td>32,757</td></tr>
-        </table>
-        <!-- Vehicle-wise Table -->
-        <table>
-          <tr class="subhead"><th class="left">Vehicle No</th><th>Day</th><th>Night</th><th>FTD Total</th><th>MTD</th></tr>
-          <tr><td class="left">AP39UQ0095</td><td id="r_trip_ap39uq0095_day">0</td><td id="r_trip_ap39uq0095_night">0</td><td id="r_trip_ap39uq0095_ftd">0</td><td>57</td></tr>
-          <tr><td class="left">AP39UQ0097</td><td id="r_trip_ap39uq0097_day">5</td><td id="r_trip_ap39uq0097_night">5</td><td id="r_trip_ap39uq0097_ftd">10</td><td>95</td></tr>
-          <tr><td class="left">AP39UW9880</td><td id="r_trip_ap39uw9880_day">6</td><td id="r_trip_ap39uw9880_night">6</td><td id="r_trip_ap39uw9880_ftd">12</td><td>152</td></tr>
-          <tr><td class="left">AP39UW9881</td><td id="r_trip_ap39uw9881_day">5</td><td id="r_trip_ap39uw9881_night">4</td><td id="r_trip_ap39uw9881_ftd">9</td><td>135</td></tr>
-          <tr><td class="left">AP39UY4651</td><td id="r_trip_ap39uy4651_day">1</td><td id="r_trip_ap39uy4651_night">5</td><td id="r_trip_ap39uy4651_ftd">6</td><td>127</td></tr>
-          <tr><td class="left">AP39UY4652</td><td id="r_trip_ap39uy4652_day">5</td><td id="r_trip_ap39uy4652_night">6</td><td id="r_trip_ap39uy4652_ftd">11</td><td>144</td></tr>
-          <tr><td class="left">AP39WC0926</td><td id="r_trip_ap39wc0926_day">0</td><td id="r_trip_ap39wc0926_night">5</td><td id="r_trip_ap39wc0926_ftd">5</td><td>136</td></tr>
-          <tr><td class="left">AP39WC0927</td><td id="r_trip_ap39wc0927_day">5</td><td id="r_trip_ap39wc0927_night">4</td><td id="r_trip_ap39wc0927_ftd">9</td><td>101</td></tr>
-          <tr><td class="left">AP39WC0928</td><td id="r_trip_ap39wc0928_day">6</td><td id="r_trip_ap39wc0928_night">6</td><td id="r_trip_ap39wc0928_ftd">12</td><td>154</td></tr>
-          <tr><td class="left">AP39WF2052</td><td id="r_trip_ap39wf2052_day">3</td><td id="r_trip_ap39wf2052_night">7</td><td id="r_trip_ap39wf2052_ftd">10</td><td>118</td></tr>
-          <tr><td class="left">AP39WF2057</td><td id="r_trip_ap39wf2057_day">3</td><td id="r_trip_ap39wf2057_night">6</td><td id="r_trip_ap39wf2057_ftd">9</td><td>149</td></tr>
-          <tr><td class="left">AP39WF2058</td><td id="r_trip_ap39wf2058_day">0</td><td id="r_trip_ap39wf2058_night">0</td><td id="r_trip_ap39wf2058_ftd">0</td><td>0</td></tr>
-          <tr class="total"><td class="left">GSB Total</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
-        </table>
-      </div>
-      <div class="boulder-right">
-        <div class="boxed">
-          <h3>Production</h3>
+        <div id="boulder-transport-section">
+          <!-- Summary Table -->
           <table>
-            <tr class="subhead"><th class="left">Product</th><th>FTD</th><th>MTD</th></tr>
-            <tr><td class="left">10 MM</td><td id="r_prod_10mm">381.6</td><td>3722.4</td></tr>
-            <tr><td class="left">20 MM</td><td id="r_prod_20mm">593.6</td><td>5790.4</td></tr>
-            <tr><td class="left">V-Sand</td><td id="r_prod_vsand">296.8</td><td>2895.2</td></tr>
-            <tr><td class="left">Railway Ballast</td><td id="r_prod_railballast">0</td><td>57</td></tr>
-            <tr><td class="left">40 MM</td><td id="r_prod_40mm">0</td><td>0</td></tr>
-            <tr><td class="left">Rivo Sand</td><td id="r_prod_rivosand">763.2</td><td>7444.8</td></tr>
-            <tr><td class="left">Slurry</td><td id="r_prod_slurry">84.8</td><td>827.2</td></tr>
-            <tr class="total"><td class="left">Total</td><td id="r_prod_total">2120</td><td>20,680</td></tr>
+            <tr class="subhead"><th class="left"></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
+            <tr><td class="left">Trips</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
+            <tr><td class="left">Tonnage</td><td id="r_ton_day">936</td><td id="r_ton_night">1,417</td><td id="r_ton_ftd">2,353</td><td>32,757</td></tr>
+          </table>
+          <!-- Vehicle-wise Table -->
+          <table>
+            <tr class="subhead"><th class="left">Vehicle No</th><th>Day</th><th>Night</th><th>FTD Total</th><th>MTD</th></tr>
+            <tr><td class="left">AP39UQ0095</td><td id="r_trip_ap39uq0095_day">0</td><td id="r_trip_ap39uq0095_night">0</td><td id="r_trip_ap39uq0095_ftd">0</td><td>57</td></tr>
+            <tr><td class="left">AP39UQ0097</td><td id="r_trip_ap39uq0097_day">5</td><td id="r_trip_ap39uq0097_night">5</td><td id="r_trip_ap39uq0097_ftd">10</td><td>95</td></tr>
+            <tr><td class="left">AP39UW9880</td><td id="r_trip_ap39uw9880_day">6</td><td id="r_trip_ap39uw9880_night">6</td><td id="r_trip_ap39uw9880_ftd">12</td><td>152</td></tr>
+            <tr><td class="left">AP39UW9881</td><td id="r_trip_ap39uw9881_day">5</td><td id="r_trip_ap39uw9881_night">4</td><td id="r_trip_ap39uw9881_ftd">9</td><td>135</td></tr>
+            <tr><td class="left">AP39UY4651</td><td id="r_trip_ap39uy4651_day">1</td><td id="r_trip_ap39uy4651_night">5</td><td id="r_trip_ap39uy4651_ftd">6</td><td>127</td></tr>
+            <tr><td class="left">AP39UY4652</td><td id="r_trip_ap39uy4652_day">5</td><td id="r_trip_ap39uy4652_night">6</td><td id="r_trip_ap39uy4652_ftd">11</td><td>144</td></tr>
+            <tr><td class="left">AP39WC0926</td><td id="r_trip_ap39wc0926_day">0</td><td id="r_trip_ap39wc0926_night">5</td><td id="r_trip_ap39wc0926_ftd">5</td><td>136</td></tr>
+            <tr><td class="left">AP39WC0927</td><td id="r_trip_ap39wc0927_day">5</td><td id="r_trip_ap39wc0927_night">4</td><td id="r_trip_ap39wc0927_ftd">9</td><td>101</td></tr>
+            <tr><td class="left">AP39WC0928</td><td id="r_trip_ap39wc0928_day">6</td><td id="r_trip_ap39wc0928_night">6</td><td id="r_trip_ap39wc0928_ftd">12</td><td>154</td></tr>
+            <tr><td class="left">AP39WF2052</td><td id="r_trip_ap39wf2052_day">3</td><td id="r_trip_ap39wf2052_night">7</td><td id="r_trip_ap39wf2052_ftd">10</td><td>118</td></tr>
+            <tr><td class="left">AP39WF2057</td><td id="r_trip_ap39wf2057_day">3</td><td id="r_trip_ap39wf2057_night">6</td><td id="r_trip_ap39wf2057_ftd">9</td><td>149</td></tr>
+            <tr><td class="left">AP39WF2058</td><td id="r_trip_ap39wf2058_day">0</td><td id="r_trip_ap39wf2058_night">0</td><td id="r_trip_ap39wf2058_ftd">0</td><td>0</td></tr>
+            <tr class="total"><td class="left">GSB Total</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
           </table>
         </div>
-        <div class="boxed">
+      </div>
+      <div class="boulder-right">
+        <div class="boxed capture-section" onclick="captureAndShareSection('production-section')">
+          <h3>Production</h3>
+          <div id="production-section">
+            <table>
+              <tr class="subhead"><th class="left">Product</th><th>FTD</th><th>MTD</th></tr>
+              <tr><td class="left">10 MM</td><td id="r_prod_10mm">381.6</td><td>3722.4</td></tr>
+              <tr><td class="left">20 MM</td><td id="r_prod_20mm">593.6</td><td>5790.4</td></tr>
+              <tr><td class="left">V-Sand</td><td id="r_prod_vsand">296.8</td><td>2895.2</td></tr>
+              <tr><td class="left">Railway Ballast</td><td id="r_prod_railballast">0</td><td>57</td></tr>
+              <tr><td class="left">40 MM</td><td id="r_prod_40mm">0</td><td>0</td></tr>
+              <tr><td class="left">Rivo Sand</td><td id="r_prod_rivosand">763.2</td><td>7444.8</td></tr>
+              <tr><td class="left">Slurry</td><td id="r_prod_slurry">84.8</td><td>827.2</td></tr>
+              <tr class="total"><td class="left">Total</td><td id="r_prod_total">2120</td><td>20,680</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="boxed capture-section" onclick="captureAndShareSection('stock-section')">
           <h3>Godown Stock</h3>
-          <table>
-            <tr class="subhead"><th class="left">Material</th><th>Quantity</th></tr>
-            <tr><td class="left">10 MM</td><td id="r_stock_10mm">130</td></tr>
-            <tr><td class="left">20 MM</td><td id="r_stock_20mm">4250</td></tr>
-            <tr><td class="left">Rivo Sand</td><td id="r_stock_rivosand">18420</td></tr>
-            <tr><td class="left">Railway Ballast</td><td id="r_stock_railballast">2000</td></tr>
-            <tr><td class="left">40 MM</td><td id="r_stock_40mm">0</td></tr>
-            <tr><td class="left">VSI</td><td id="r_stock_vsi">17235</td></tr>
-            <tr><td class="left">GSB</td><td id="r_stock_gsb">0</td></tr>
-            <tr class="total"><td class="left">Total</td><td id="r_stock_total">42,035</td></tr>
-          </table>
+          <div id="stock-section">
+            <table>
+              <tr class="subhead"><th class="left">Material</th><th>Quantity</th></tr>
+              <tr><td class="left">10 MM</td><td id="r_stock_10mm">130</td></tr>
+              <tr><td class="left">20 MM</td><td id="r_stock_20mm">4250</td></tr>
+              <tr><td class="left">Rivo Sand</td><td id="r_stock_rivosand">18420</td></tr>
+              <tr><td class="left">Railway Ballast</td><td id="r_stock_railballast">2000</td></tr>
+              <tr><td class="left">40 MM</td><td id="r_stock_40mm">0</td></tr>
+              <tr><td class="left">VSI</td><td id="r_stock_vsi">17235</td></tr>
+              <tr><td class="left">GSB</td><td id="r_stock_gsb">0</td></tr>
+              <tr class="total"><td class="left">Total</td><td id="r_stock_total">42,035</td></tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-    <div class="grid">
-      <!-- TOTAL PRODUCTION SUMMARY -->
-      <div>
-        <h2>PRODUCTION SUMMARY</h2>
+    <div class="capture-section full-width" onclick="captureAndShareSection('summary-section')">
+      <h2>PRODUCTION SUMMARY</h2>
+      <div id="summary-section">
         <table>
           <tr class="subhead"><th class="left">Item</th><th>FTD</th><th>MTD</th></tr>
           <tr class="total">
@@ -490,6 +516,80 @@ function generateReport() {
   const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
   document.getElementById('today').innerText = today;
 }
+
+// Function to capture a section as image and share
+async function captureAndShareSection(sectionId) {
+  const element = document.getElementById(sectionId);
+  if (!element) {
+    alert('Section not found!');
+    return;
+  }
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 2, // Higher resolution
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff'
+    });
+    const imageData = canvas.toDataURL('image/png');
+    const blob = await (await fetch(imageData)).blob();
+    await shareImage(blob, `${sectionId.replace('-section', '')}.png`);
+  } catch (error) {
+    console.error('Capture failed:', error);
+    alert('Capture failed. Try downloading instead.');
+    downloadImage(imageData, `${sectionId.replace('-section', '')}.png`);
+  }
+}
+
+// Function to capture full report
+async function captureAndShareFullReport() {
+  const element = document.getElementById('report');
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff'
+    });
+    const imageData = canvas.toDataURL('image/png');
+    const blob = await (await fetch(imageData)).blob();
+    await shareImage(blob, 'full-report.png');
+  } catch (error) {
+    console.error('Capture failed:', error);
+    alert('Capture failed. Try downloading instead.');
+    downloadImage(imageData, 'full-report.png');
+  }
+}
+
+// Share image using Web Share API (works best on mobile)
+async function shareImage(blob, filename) {
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: 'image/png' })] })) {
+    try {
+      await navigator.share({
+        title: 'Daily Operations Report',
+        text: 'Sharing report section/image',
+        files: [new File([blob], filename, { type: 'image/png' })]
+      });
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Share failed:', error);
+        downloadImage(URL.createObjectURL(blob), filename);
+      }
+    }
+  } else {
+    // Fallback to download
+    downloadImage(URL.createObjectURL(blob), filename);
+  }
+}
+
+// Download image fallback
+function downloadImage(imageUrl, filename) {
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = imageUrl;
+  link.click();
+}
+
 // Auto-update on input change (optional)
 document.querySelectorAll('input').forEach(input => {
   input.addEventListener('input', generateReport);
