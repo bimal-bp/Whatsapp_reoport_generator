@@ -225,19 +225,19 @@
         size: A4 portrait;
         margin: 1cm;
       }
-      body { 
-        background: white; 
-        padding: 0; 
+      body {
+        background: white;
+        padding: 0;
         font-size: 12px;
       }
       .container {
         max-width: none;
       }
       .controls { display: none; }
-      .report { 
-        box-shadow: none; 
-        border: none; 
-        padding: 10px; 
+      .report {
+        box-shadow: none;
+        border: none;
+        padding: 10px;
         max-width: none;
         width: 100%;
       }
@@ -558,10 +558,12 @@ async function captureAndShareSection(sectionId) {
   }
   try {
     const canvas = await html2canvas(element, {
-      scale: 2, // Higher resolution
+      scale: 3, // Increased for higher resolution and clarity
       useCORS: true,
       allowTaint: true,
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
+      width: element.scrollWidth,
+      height: element.scrollHeight
     });
     const imageData = canvas.toDataURL('image/png');
     const blob = await (await fetch(imageData)).blob();
@@ -577,10 +579,12 @@ async function captureAndShareFullReport() {
   const element = document.getElementById('report');
   try {
     const canvas = await html2canvas(element, {
-      scale: 2,
+      scale: 3, // Increased for higher resolution and clarity
       useCORS: true,
       allowTaint: true,
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
+      width: element.scrollWidth,
+      height: element.scrollHeight
     });
     const imageData = canvas.toDataURL('image/png');
     const blob = await (await fetch(imageData)).blob();
