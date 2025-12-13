@@ -221,10 +221,37 @@
       .input-group { grid-template-columns: 1fr; }
     }
     @media print {
-      body { background: white; padding: 0; }
+      @page {
+        size: A4 portrait;
+        margin: 1cm;
+      }
+      body { 
+        background: white; 
+        padding: 0; 
+        font-size: 12px;
+      }
+      .container {
+        max-width: none;
+      }
       .controls { display: none; }
-      .report { box-shadow: none; border: none; padding: 10px; }
+      .report { 
+        box-shadow: none; 
+        border: none; 
+        padding: 10px; 
+        max-width: none;
+        width: 100%;
+      }
       button { display: none; }
+      .grid, .boulder-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      table {
+        font-size: 11px;
+      }
+      th, td {
+        padding: 5px 4px;
+      }
     }
   </style>
   <!-- Add html2canvas library for capturing DOM as image -->
@@ -328,38 +355,40 @@
   <div class="report" id="report">
     <h1>DAILY OPERATIONS REPORT</h1>
     <div class="date">Date: <span id="today"></span></div>
-    <!-- Add clickable sections for capture -->
-    <div class="capture-section" onclick="captureAndShareSection('mine-op-section')">
-      <h2>MINE OPERATION</h2>
-      <div id="mine-op-section">
-        <table>
-          <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
-          <tr><td class="left">Production (tons)</td><td id="r_mine_prod">2,612</td><td>50,453</td></tr>
-          <tr><td class="left">No. of Holes</td><td id="r_holes">600</td><td>11,702</td></tr>
-          <tr><td class="left">Total Feetage (ft)</td><td id="r_feetage">3,266</td><td>63,066</td></tr>
-          <tr><td class="left">No. of NMR</td><td id="r_nmr">9</td><td>183</td></tr>
-          <tr><td class="left">Running Hrs</td><td id="r_run_hrs">10.2</td><td>169.9</td></tr>
-          <tr><td class="left">Maintenance Hrs</td><td id="r_maint_hrs">3.5</td><td>64</td></tr>
-          <tr><td class="left">Breakdown Hrs</td><td id="r_break_hrs">0</td><td>6</td></tr>
-          <tr><td class="left">Power Cut Hrs</td><td id="r_power_hrs">3.8</td><td>95.6</td></tr>
-          <tr><td class="left">% Breaking</td><td id="r_breaking">23%</td><td>20%</td></tr>
-        </table>
-        <div class="remark">Remark: <span id="r_mine_remark">Staggered Blasting Pattern Implemented</span></div>
+    <!-- Mine and Plant in 2-column 1-row grid -->
+    <div class="grid">
+      <div class="capture-section" onclick="captureAndShareSection('mine-op-section')">
+        <h2>MINE OPERATION</h2>
+        <div id="mine-op-section">
+          <table>
+            <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
+            <tr><td class="left">Production (tons)</td><td id="r_mine_prod">2,612</td><td>50,453</td></tr>
+            <tr><td class="left">No. of Holes</td><td id="r_holes">600</td><td>11,702</td></tr>
+            <tr><td class="left">Total Feetage (ft)</td><td id="r_feetage">3,266</td><td>63,066</td></tr>
+            <tr><td class="left">No. of NMR</td><td id="r_nmr">9</td><td>183</td></tr>
+            <tr><td class="left">Running Hrs</td><td id="r_run_hrs">10.2</td><td>169.9</td></tr>
+            <tr><td class="left">Maintenance Hrs</td><td id="r_maint_hrs">3.5</td><td>64</td></tr>
+            <tr><td class="left">Breakdown Hrs</td><td id="r_break_hrs">0</td><td>6</td></tr>
+            <tr><td class="left">Power Cut Hrs</td><td id="r_power_hrs">3.8</td><td>95.6</td></tr>
+            <tr><td class="left">% Breaking</td><td id="r_breaking">23%</td><td>20%</td></tr>
+          </table>
+          <div class="remark">Remark: <span id="r_mine_remark">Staggered Blasting Pattern Implemented</span></div>
+        </div>
       </div>
-    </div>
-    <div class="capture-section" onclick="captureAndShareSection('plant-op-section')">
-      <h2>PLANT OPERATION</h2>
-      <div id="plant-op-section">
-        <table>
-          <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
-          <tr><td class="left">Production (tons)</td><td id="r_plant_prod">1,865</td><td>31,987</td></tr>
-          <tr><td class="left">No. of Compressors Running</td><td id="r_compressors">9</td><td>183</td></tr>
-          <tr><td class="left">TPH (Avg)</td><td id="r_tph">183</td><td>188</td></tr>
-          <tr><td class="left">Boulder Jam Hrs</td><td id="r_jam_hrs">0.5</td><td>20.9</td></tr>
-          <tr><td class="left">No Feed Hrs</td><td id="r_nofeed_hrs">2.5</td><td>34</td></tr>
-          <tr><td class="left">% of Recovery</td><td id="r_recovery">83%</td><td>83%</td></tr>
-        </table>
-        <div class="remark">Remark: <span id="r_plant_remark">Plant running smoothly with minor delays due to boulder jamming</span></div>
+      <div class="capture-section" onclick="captureAndShareSection('plant-op-section')">
+        <h2>PLANT OPERATION</h2>
+        <div id="plant-op-section">
+          <table>
+            <tr class="subhead"><th class="left">Parameter</th><th>FTD</th><th>MTD</th></tr>
+            <tr><td class="left">Production (tons)</td><td id="r_plant_prod">1,865</td><td>31,987</td></tr>
+            <tr><td class="left">No. of Compressors Running</td><td id="r_compressors">9</td><td>183</td></tr>
+            <tr><td class="left">TPH (Avg)</td><td id="r_tph">183</td><td>188</td></tr>
+            <tr><td class="left">Boulder Jam Hrs</td><td id="r_jam_hrs">0.5</td><td>20.9</td></tr>
+            <tr><td class="left">No Feed Hrs</td><td id="r_nofeed_hrs">2.5</td><td>34</td></tr>
+            <tr><td class="left">% of Recovery</td><td id="r_recovery">83%</td><td>83%</td></tr>
+          </table>
+          <div class="remark">Remark: <span id="r_plant_remark">Plant running smoothly with minor delays due to boulder jamming</span></div>
+        </div>
       </div>
     </div>
     <div class="boulder-grid">
