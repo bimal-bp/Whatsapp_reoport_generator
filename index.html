@@ -17,6 +17,7 @@
     margin:20px auto;
     background:#ffffff;
     padding:12px;
+    border: 1px solid #000;
   }
   .flex{
     display:flex;
@@ -37,13 +38,11 @@
     border:1px solid #000;
     padding:6px 8px;
     font-size:14px;
+    text-align: center;
   }
   th{
     text-align:center;
     font-weight:600;
-  }
-  td{
-    text-align:right;
   }
   .left{text-align:left;}
   .center{text-align:center;}
@@ -76,7 +75,7 @@
     font-weight:bold;
   }
   @media(max-width:900px){
-    .container{ width:100%; }
+    .container{ width:100%; border: none; }
     .flex{ flex-direction:column; }
     .left70,.right30,.left50,.right50,.left60,.right40{ width:100%; }
   }
@@ -262,11 +261,13 @@
         <td class="left"><b>Total Qty</b></td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>1,043</td>
       </tr>
       <tr class="total">
         <td class="left"><b>Total Vehicles</b></td>
-        <td colspan="3"></td>
+        <td></td>
+        <td></td>
+        <td>28</td>
       </tr>
       <tr>
         <td class="left" colspan="4">REMARK : -</td>
