@@ -57,6 +57,10 @@
       width: 100px;
       font-size: 14px;
     }
+    .input-row input.full-width {
+      width: auto;
+      flex: 1;
+    }
     button {
       background: var(--orange);
       color: white;
@@ -307,6 +311,13 @@
       <div class="input-row"><label>GSB</label><input type="number" id="stock_gsb" value="0"></div>
       <div class="input-row"><label>Total Stock</label><input type="number" id="stock_total" value="42035"></div>
     </div>
+    <h4>Remarks</h4>
+    <div class="input-group">
+      <div class="input-row"><label>Mine Operation Remark</label><input type="text" id="mine_remark" value="Staggered Blasting Pattern Implemented" class="full-width"></div>
+    </div>
+    <div class="input-group">
+      <div class="input-row"><label>Plant Operation Remark</label><input type="text" id="plant_remark" value="Plant running smoothly with minor delays due to boulder jamming" class="full-width"></div>
+    </div>
     <center>
       <button onclick="generateReport()">Generate / Update Report</button>
       <button class="print-btn" onclick="window.print()">Print Report</button>
@@ -333,7 +344,7 @@
           <tr><td class="left">Power Cut Hrs</td><td id="r_power_hrs">3.8</td><td>95.6</td></tr>
           <tr><td class="left">% Breaking</td><td id="r_breaking">23%</td><td>20%</td></tr>
         </table>
-        <div class="remark">Remark: Staggered Blasting Pattern Implemented</div>
+        <div class="remark">Remark: <span id="r_mine_remark">Staggered Blasting Pattern Implemented</span></div>
       </div>
     </div>
     <div class="capture-section" onclick="captureAndShareSection('plant-op-section')">
@@ -348,7 +359,7 @@
           <tr><td class="left">No Feed Hrs</td><td id="r_nofeed_hrs">2.5</td><td>34</td></tr>
           <tr><td class="left">% of Recovery</td><td id="r_recovery">83%</td><td>83%</td></tr>
         </table>
-        <div class="remark">Remark: Plant running smoothly with minor delays due to boulder jamming</div>
+        <div class="remark">Remark: <span id="r_plant_remark">Plant running smoothly with minor delays due to boulder jamming</span></div>
       </div>
     </div>
     <div class="boulder-grid">
@@ -419,19 +430,9 @@
       <h2>PRODUCTION SUMMARY</h2>
       <div id="summary-section">
         <table>
-          <tr class="subhead"><th class="left">Item</th><th>FTD</th><th>MTD</th></tr>
-          <tr class="total">
-            <td class="left">Mine Production</td>
-            <td id="s_mine">2,612</td><td>50,453</td>
-          </tr>
-          <tr class="total">
-            <td class="left">Plant Production</td>
-            <td id="s_plant">1,865</td><td>31,987</td>
-          </tr>
-          <tr class="total" style="background:#f39c12 !important;color:white;">
-            <td class="left">Net Production</td>
-            <td id="s_total">—</td><td>—</td>
-          </tr>
+          <tr class="subhead"><th class="left"></th><th>Mine Production</th><th>Plant Production</th><th>Total Production</th></tr>
+          <tr><td class="left">FTD</td><td id="s_mine">2,612</td><td id="s_plant">1,865</td><td class="total" id="s_total_ftd">—</td></tr>
+          <tr class="total"><td class="left">MTD</td><td>50,453</td><td>31,987</td><td>82,440</td></tr>
         </table>
       </div>
     </div>
@@ -464,6 +465,9 @@ function generateReport() {
   document.getElementById('r_nofeed_hrs').innerText = document.getElementById('nofeed_hrs').value;
   document.getElementById('r_recovery').innerText = document.getElementById('recovery').value + '%';
   document.getElementById('r_breaking').innerText = document.getElementById('breaking').value + '%';
+  // Remarks
+  document.getElementById('r_mine_remark').innerText = document.getElementById('mine_remark').value;
+  document.getElementById('r_plant_remark').innerText = document.getElementById('plant_remark').value;
   // Boulder Transportation - Production
   document.getElementById('r_prod_10mm').innerText = document.getElementById('prod_10mm').value;
   document.getElementById('r_prod_20mm').innerText = document.getElementById('prod_20mm').value;
@@ -511,12 +515,11 @@ function generateReport() {
   // Summary
   document.getElementById('s_mine').innerText = mine.toLocaleString();
   document.getElementById('s_plant').innerText = plant.toLocaleString();
-  document.getElementById('s_total').innerText = (mine + plant).toLocaleString();
+  document.getElementById('s_total_ftd').innerText = (mine + plant).toLocaleString();
   // Today's date
   const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
   document.getElementById('today').innerText = today;
 }
-
 // Function to capture a section as image and share
 async function captureAndShareSection(sectionId) {
   const element = document.getElementById(sectionId);
@@ -540,7 +543,6 @@ async function captureAndShareSection(sectionId) {
     downloadImage(imageData, `${sectionId.replace('-section', '')}.png`);
   }
 }
-
 // Function to capture full report
 async function captureAndShareFullReport() {
   const element = document.getElementById('report');
@@ -560,7 +562,6 @@ async function captureAndShareFullReport() {
     downloadImage(imageData, 'full-report.png');
   }
 }
-
 // Share image using Web Share API (works best on mobile)
 async function shareImage(blob, filename) {
   if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: 'image/png' })] })) {
@@ -581,7 +582,6 @@ async function shareImage(blob, filename) {
     downloadImage(URL.createObjectURL(blob), filename);
   }
 }
-
 // Download image fallback
 function downloadImage(imageUrl, filename) {
   const link = document.createElement('a');
@@ -589,7 +589,6 @@ function downloadImage(imageUrl, filename) {
   link.href = imageUrl;
   link.click();
 }
-
 // Auto-update on input change (optional)
 document.querySelectorAll('input').forEach(input => {
   input.addEventListener('input', generateReport);
