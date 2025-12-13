@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Operations Report Generator</title>
+  <style>
+    :root {
+      --w: 1400px;
+      --h: 950px;
+      --orange: #f07a2a;
+      --border: #000;
+    }
+
+    body {
+      background:#ddd;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .controls {
+      width: var(--w);
+      margin:20px auto 10px;
+      background:#fff;
+      padding:10px;
+      border:2px solid #000;
+    }
+
+    .controls input {
+      width:80px;
+      padding:4px;
+      margin:2px;
+    }
+
+    .controls button {
+      padding:6px 12px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .report {
+      width: var(--w);
+      height: var(--h);
+      background:#fff;
+      margin:0 auto 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,.3);
+      box-sizing: border-box;
+      padding: 6px;
+    }
+
+    h2 {
+      margin:0;
+      padding:8px 0;
+      background:var(--orange);
+      color:#fff;
+      text-align:center;
+      font-size:20px;
+    }
+
+    table {
+      width:100%;
+      border-collapse: collapse;
+      font-size:14px;
+    }
+
+    th, td {
+      border:1px solid var(--border);
+      padding:6px 8px;
+      text-align:center;
+    }
+
+    th.left, td.left { text-align:left; }
+
+    .grid {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:6px;
+    }
+
+    .section { border:2px solid var(--border); }
+
+    .remark {
+      padding:10px;
+      font-weight:bold;
+      text-align:center;
+    }
+
+    .subhead { background:#f4f4f4; font-weight:bold; }
+    .total { font-weight:bold; }
+  </style>
+</head>
+<body>
+
+<!-- INPUT CONTROLS -->
+<div class="controls">
+  <b>Enter Daily Values (FTD)</b><br/><br/>
+  Mine Production: <input id="mine_prod" value="2612"> 
+  Plant Production: <input id="plant_prod" value="1865"> 
+  Trips Day: <input id="trips_day" value="39"> 
+  Trips Night: <input id="trips_night" value="54"> 
+  <button onclick="generateReport()">Generate Report</button>
+</div>
+
+<!-- REPORT -->
+<div class="report" id="report">
+
+  <div class="grid">
+    <div class="section">
+      <h2>Mine Operation</h2>
+      <table>
+        <tr class="subhead"><th class="left"></th><th>FTD</th><th>MTD</th></tr>
+        <tr><td class="left">Production</td><td id="r_mine_prod">2612</td><td>50453</td></tr>
+      </table>
+      <div class="remark">Remark : Staggered Blasting Pattern</div>
+    </div>
+
+    <div class="section">
+      <h2>Plant Operation</h2>
+      <table>
+        <tr class="subhead"><th class="left"></th><th>FTD</th><th>MTD</th></tr>
+        <tr><td class="left">Production</td><td id="r_plant_prod">1865</td><td>31987</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="grid">
+    <div class="section">
+      <h2>Boulder Transportation</h2>
+      <table>
+        <tr class="subhead"><th></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
+        <tr>
+          <td class="left">Trips</td>
+          <td id="r_day">39</td>
+          <td id="r_night">54</td>
+          <td id="r_ftd">93</td>
+          <td>1368</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>Production</h2>
+      <table>
+        <tr class="subhead"><th class="left"></th><th>FTD</th><th>MTD</th></tr>
+        <tr class="total"><td class="left">Total</td><td id="r_total">2120</td><td>20680</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function generateReport() {
+  const mine = document.getElementById('mine_prod').value;
+  const plant = document.getElementById('plant_prod').value;
+  const day = Number(document.getElementById('trips_day').value);
+  const night = Number(document.getElementById('trips_night').value);
+
+  document.getElementById('r_mine_prod').innerText = mine;
+  document.getElementById('r_plant_prod').innerText = plant;
+  document.getElementById('r_day').innerText = day;
+  document.getElementById('r_night').innerText = night;
+  document.getElementById('r_ftd').innerText = day + night;
+}
+</script>
+
+</body>
+</html>
