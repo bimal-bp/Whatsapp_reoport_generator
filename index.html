@@ -178,16 +178,42 @@
     </table>
   </div>
 </div>
-<!-- ================= BOULDER TRANSPORTATION ================= -->
-<table class="thick">
-  <tr><th colspan="5" class="subheader">Boulder Transportation</th></tr>
-  <tr><th></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
-  <tr><td class="left"><b>Trips</b></td><td>39</td><td>54</td><td>93</td><td>1,368</td></tr>
-  <tr><td class="left"><b>Tonnage</b></td><td>936</td><td>1,417</td><td>2,353</td><td>32,757</td></tr>
-</table>
-<!-- ================= PRODUCT + GODOWN ================= -->
+<!-- ================= BOULDER TRANSPORTATION + VEHICLE WISE (LEFT 60%) + PRODUCTION + GODOWN STOCK (RIGHT 40%, STACKED) ================= -->
 <div class="flex">
   <div class="left60">
+    <!-- BOULDER TRANSPORTATION -->
+    <table class="thick">
+      <tr><th colspan="5" class="subheader">Boulder Transportation</th></tr>
+      <tr><th></th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
+      <tr><td class="left"><b>Trips</b></td><td>39</td><td>54</td><td>93</td><td>1,368</td></tr>
+      <tr><td class="left"><b>Tonnage</b></td><td>936</td><td>1,417</td><td>2,353</td><td>32,757</td></tr>
+    </table>
+    <!-- VEHICLE WISE TRANSPORT -->
+    <table>
+      <tr><th colspan="5" class="subheader">Vehicle Wise Trips</th></tr>
+      <tr><th>Vehicle No</th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
+      <tr><td class="left">AP39UQ0095</td><td>0</td><td>0</td><td>0</td><td>57</td></tr>
+      <tr><td class="left">AP39UQ0097</td><td>5</td><td>5</td><td>10</td><td>95</td></tr>
+      <tr><td class="left">AP39UW9880</td><td>6</td><td>6</td><td>12</td><td>152</td></tr>
+      <tr><td class="left">AP39UW9881</td><td>5</td><td>4</td><td>9</td><td>135</td></tr>
+      <tr><td class="left">AP39UY4651</td><td>1</td><td>5</td><td>6</td><td>127</td></tr>
+      <tr><td class="left">AP39UY4652</td><td>5</td><td>6</td><td>11</td><td>144</td></tr>
+      <tr><td class="left">AP39WC0926</td><td>0</td><td>5</td><td>5</td><td>136</td></tr>
+      <tr><td class="left">AP39WC0927</td><td>5</td><td>4</td><td>9</td><td>101</td></tr>
+      <tr><td class="left">AP39WC0928</td><td>6</td><td>6</td><td>12</td><td>154</td></tr>
+      <tr><td class="left">AP39WF2052</td><td>3</td><td>7</td><td>10</td><td>118</td></tr>
+      <tr><td class="left">AP39WF2057</td><td>3</td><td>6</td><td>9</td><td>149</td></tr>
+      <tr><td class="left">AP39WF2058</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr class="total">
+        <td class="left"><b>Total</b></td>
+        <td><b>39</b></td>
+        <td><b>54</b></td>
+        <td><b>93</b></td>
+        <td><b>1,368</b></td>
+      </tr>
+    </table>
+  </div>
+  <div class="right40">
     <!-- PRODUCTION -->
     <table>
       <tr><th colspan="3" class="subheader">Production</th></tr>
@@ -203,8 +229,6 @@
         <td><b>20,680</b></td>
       </tr>
     </table>
-  </div>
-  <div class="right40">
     <!-- GODOWN STOCK -->
     <table>
       <tr><th colspan="2" class="subheader orangeText center">Godown Stock</th></tr>
@@ -220,30 +244,6 @@
     </table>
   </div>
 </div>
-<!-- ================= VEHICLE WISE TRANSPORT ================= -->
-<table>
-  <tr><th colspan="5" class="subheader">Vehicle Wise Trips</th></tr>
-  <tr><th>Vehicle No</th><th>Day</th><th>Night</th><th>FTD</th><th>MTD</th></tr>
-  <tr><td class="left">AP39UQ0095</td><td>0</td><td>0</td><td>0</td><td>57</td></tr>
-  <tr><td class="left">AP39UQ0097</td><td>5</td><td>5</td><td>10</td><td>95</td></tr>
-  <tr><td class="left">AP39UW9880</td><td>6</td><td>6</td><td>12</td><td>152</td></tr>
-  <tr><td class="left">AP39UW9881</td><td>5</td><td>4</td><td>9</td><td>135</td></tr>
-  <tr><td class="left">AP39UY4651</td><td>1</td><td>5</td><td>6</td><td>127</td></tr>
-  <tr><td class="left">AP39UY4652</td><td>5</td><td>6</td><td>11</td><td>144</td></tr>
-  <tr><td class="left">AP39WC0926</td><td>0</td><td>5</td><td>5</td><td>136</td></tr>
-  <tr><td class="left">AP39WC0927</td><td>5</td><td>4</td><td>9</td><td>101</td></tr>
-  <tr><td class="left">AP39WC0928</td><td>6</td><td>6</td><td>12</td><td>154</td></tr>
-  <tr><td class="left">AP39WF2052</td><td>3</td><td>7</td><td>10</td><td>118</td></tr>
-  <tr><td class="left">AP39WF2057</td><td>3</td><td>6</td><td>9</td><td>149</td></tr>
-  <tr><td class="left">AP39WF2058</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-  <tr class="total">
-    <td class="left"><b>Total</b></td>
-    <td><b>39</b></td>
-    <td><b>54</b></td>
-    <td><b>93</b></td>
-    <td><b>1,368</b></td>
-  </tr>
-</table>
 </div>
 </body>
-</html> ,Boulder Transportation ,Vehicle Wise Trips these 2 will be in left side 1,2 then with 60% area cover for 40 % rest keep these 2 boxex up and down as Production ,Godown Stock with option to capture as copy paste systetm we do in excel to share as a image systems
+</html>
