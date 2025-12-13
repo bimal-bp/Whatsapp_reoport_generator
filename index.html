@@ -263,15 +263,13 @@
 </head>
 <body>
   <div class="container">
-
-    <!-- REPORT OUTPUT - NOW AT THE TOP -->
+    <!-- REPORT OUTPUT -->
     <div class="report" id="report">
       <h1>DAILY OPERATIONS REPORT</h1>
       <div class="summary-header">
         SGX -MISSION -MIS<br>
         Date: <span id="today"></span>
       </div>
-
       <div class="full-width">
         <h2>EXECUTIVE SUMMARY</h2>
         <table>
@@ -284,7 +282,6 @@
           <tr class="total"><td class="left">Total Revenue (In Lkhs)</td><td id="sum_total_rev_ftd">₹8.80</td><td>₹149.30</td></tr>
         </table>
       </div>
-
       <div class="grid">
         <div>
           <h2>MINE OPERATION</h2>
@@ -300,7 +297,6 @@
           </table>
           <div class="remark">Remark: Staggered Blasting Pattern</div>
         </div>
-
         <div>
           <h2>PLANT OPERATION</h2>
           <table>
@@ -317,7 +313,6 @@
           <div class="remark">Remark: <span id="r_plant_remark"></span></div>
         </div>
       </div>
-
       <!-- Boulder Transportation Section -->
       <div class="boulder-grid">
         <div class="boulder-left">
@@ -327,10 +322,8 @@
             <tr><td class="left">Trips</td><td id="r_trips_day">39</td><td id="r_trips_night">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
             <tr><td class="left">Tonnage</td><td id="r_ton_day">936</td><td id="r_ton_night">1,417</td><td id="r_ton_ftd">2,353</td><td>32,757</td></tr>
           </table>
-
           <table>
             <tr class="subhead"><th class="left">Vehicle No</th><th>Day</th><th>Night</th><th>FTD Total</th><th>MTD</th></tr>
-            <!-- Vehicle rows (same as before) -->
             <tr><td class="left">AP39UQ0095</td><td id="r_trip_ap39uq0095_day">0</td><td id="r_trip_ap39uq0095_night">0</td><td id="r_trip_ap39uq0095_ftd">0</td><td>57</td></tr>
             <tr><td class="left">AP39UQ0097</td><td id="r_trip_ap39uq0097_day">5</td><td id="r_trip_ap39uq0097_night">5</td><td id="r_trip_ap39uq0097_ftd">10</td><td>95</td></tr>
             <tr><td class="left">AP39UW9880</td><td id="r_trip_ap39uw9880_day">6</td><td id="r_trip_ap39uw9880_night">6</td><td id="r_trip_ap39uw9880_ftd">12</td><td>152</td></tr>
@@ -346,7 +339,6 @@
             <tr class="total"><td class="left">Total</td><td id="r_trips_day_total">39</td><td id="r_trips_night_total">54</td><td id="r_trips_ftd">93</td><td>1,368</td></tr>
           </table>
         </div>
-
         <div class="boulder-right">
           <div class="boxed">
             <h3>Production</h3>
@@ -362,7 +354,6 @@
               <tr class="total"><td class="left">Total</td><td id="r_prod_total">2120</td><td>20,680</td></tr>
             </table>
           </div>
-
           <div class="boxed">
             <h3>Godown Stock</h3>
             <table>
@@ -379,7 +370,6 @@
           </div>
         </div>
       </div>
-
       <div class="grid">
         <div>
           <h2>MACHINERY AVAILABILITY</h2>
@@ -391,7 +381,6 @@
             <tr><td class="left">Rental Vehicle Available</td><td id="r_rental_vehicle">2</td><td id="r_rental_perf">72</td></tr>
           </table>
         </div>
-
         <div>
           <h2 class="achievement">ACHIEVEMENT %</h2>
           <table>
@@ -405,10 +394,9 @@
       </div>
     </div>
 
-    <!-- INPUT CONTROLS - NOW BELOW THE REPORT -->
+    <!-- INPUT CONTROLS -->
     <div class="controls">
       <h3>Enter Today's (FTD) Data – Update & Click Generate</h3>
-      <!-- All your input groups remain exactly the same -->
       <div class="input-group">
         <div class="input-row"><label>No. of Compressors</label><input type="number" id="compressors" value="9"></div>
         <div class="input-row"><label>No. of NMR</label><input type="number" id="nmr" value="9"></div>
@@ -418,7 +406,6 @@
         <div class="input-row"><label>% Recovery</label><input type="number" step="0.1" id="recovery" value="83"></div>
         <div class="input-row"><label>% Breaking</label><input type="number" step="0.1" id="breaking" value="23"></div>
       </div>
-
       <div class="input-group">
         <div class="input-row"><label>Plant Production (tons)</label><input type="number" id="plant_prod" value="1865"></div>
         <div class="input-row"><label>Running Hours</label><input type="number" step="0.1" id="run_hrs" value="10.2"></div>
@@ -431,10 +418,6 @@
         <div class="input-row"><label>Trips - Day Shift</label><input type="number" id="trips_day" value="39"></div>
         <div class="input-row"><label>Trips - Night Shift</label><input type="number" id="trips_night" value="54"></div>
       </div>
-
-      <!-- All other input groups (Boulder Transportation, Summary, Stock, Machinery, Achievement, Remarks) remain unchanged -->
-      <!-- (Omitted here for brevity – copy them exactly as in your original code) -->
-
       <center>
         <button onclick="generateReport()">Generate / Update Report</button>
         <button class="achievement-btn" onclick="generateAchievement()">Update Achievement</button>
@@ -446,9 +429,92 @@
 
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
-    // Your existing JavaScript remains unchanged
-    // (generateReport, generateAchievement, shareReport functions)
-    // ... [paste your full script here]
+    // Set current date
+    document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB');
+
+    function generateReport() {
+      // Mine Operation
+      document.getElementById('r_compressors').textContent = document.getElementById('compressors').value;
+      document.getElementById('r_nmr').textContent = document.getElementById('nmr').value;
+      document.getElementById('r_holes').textContent = document.getElementById('holes').value;
+      document.getElementById('r_feetage').textContent = Number(document.getElementById('feetage').value).toLocaleString();
+      document.getElementById('r_mine_prod').textContent = Number(document.getElementById('mine_prod').value).toLocaleString();
+      document.getElementById('r_recovery').textContent = document.getElementById('recovery').value + '%';
+      document.getElementById('r_breaking').textContent = document.getElementById('breaking').value + '%';
+
+      // Plant Operation
+      document.getElementById('r_plant_prod').textContent = Number(document.getElementById('plant_prod').value).toLocaleString();
+      document.getElementById('r_run_hrs').textContent = document.getElementById('run_hrs').value;
+      document.getElementById('r_tph').textContent = document.getElementById('tph').value;
+      document.getElementById('r_maint_hrs').textContent = document.getElementById('maint_hrs').value;
+      document.getElementById('r_break_hrs').textContent = document.getElementById('break_hrs').value;
+      document.getElementById('r_power_hrs').textContent = document.getElementById('power_hrs').value;
+      document.getElementById('r_jam_hrs').textContent = document.getElementById('jam_hrs').value;
+      document.getElementById('r_nofeed_hrs').textContent = document.getElementById('nofeed_hrs').value;
+
+      // Boulder Transportation Trips
+      document.getElementById('r_trips_day').textContent = document.getElementById('trips_day').value;
+      document.getElementById('r_trips_night').textContent = document.getElementById('trips_night').value;
+      const totalTrips = parseInt(document.getElementById('trips_day').value) + parseInt(document.getElementById('trips_night').value);
+      document.getElementById('r_trips_ftd').textContent = totalTrips;
+
+      // You can extend this function to update other sections as needed
+      alert('Report updated successfully!');
+    }
+
+    function generateAchievement() {
+      // Placeholder - add your achievement calculation logic here
+      alert('Achievement updated (add your logic here)');
+    }
+
+    async function shareReport() {
+      const element = document.getElementById('report');
+      const loadingAlert = alert('Capturing report... Please wait.');
+
+      try {
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          width: element.scrollWidth,
+          height: element.scrollHeight,
+          backgroundColor: '#ffffff'
+        });
+
+        canvas.toBlob(async (blob) => {
+          if (blob) {
+            const file = new File([blob], 'Daily_Operations_Report_' + new Date().toLocaleDateString('en-GB').replace(/\//g, '-') + '.png', { type: 'image/png' });
+
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+              try {
+                await navigator.share({
+                  files: [file],
+                  title: 'Daily Operations Report',
+                  text: 'SGX - MISSION - MIS Daily Report - ' + new Date().toLocaleDateString('en-GB')
+                });
+              } catch (err) {
+                console.warn('Share failed:', err);
+                fallbackDownload(canvas);
+              }
+            } else {
+              // Fallback to download
+              fallbackDownload(canvas);
+            }
+          }
+        }, 'image/png');
+      } catch (err) {
+        console.error('Capture failed:', err);
+        alert('Failed to capture the report. Please try again.');
+      }
+    }
+
+    function fallbackDownload(canvas) {
+      const link = document.createElement('a');
+      link.download = 'Daily_Operations_Report_' + new Date().toLocaleDateString('en-GB').replace(/\//g, '-') + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      alert('Image downloaded successfully! You can now attach it manually in WhatsApp.');
+    }
   </script>
 </body>
 </html>
