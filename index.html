@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boulder Transportation MIS</title>
-
 <style>
   body{
     font-family: Segoe UI, Arial, Calibri, sans-serif;
@@ -12,46 +11,37 @@
     margin:0;
     padding:0;
   }
-
   .container{
     width:1200px;
     margin:20px auto;
     background:#ffffff;
     padding:12px;
   }
-
   .flex{
     display:flex;
     gap:12px;
   }
-
   .left60{ width:60%; }
   .right40{ width:40%; }
-
   table{
     width:100%;
     border-collapse:collapse;
     margin-bottom:12px;
   }
-
   th, td{
     border:1px solid #000;
     padding:6px 8px;
     font-size:14px;
   }
-
   th{
     text-align:center;
     font-weight:600;
   }
-
   td{
     text-align:right;
   }
-
   .left{text-align:left;}
   .center{text-align:center;}
-
   .header{
     background:#f47b2a;
     color:#ffffff;
@@ -59,61 +49,49 @@
     font-weight:bold;
     text-align:center;
   }
-
   .subheader{
     background:#f47b2a;
     color:#ffffff;
     font-weight:bold;
     text-align:center;
   }
-
   .thick th, .thick td{
     border-width:2px;
   }
-
   .total{
     font-weight:bold;
     border-top:2px solid #000;
   }
-
   .orangeText{
     color:#f47b2a;
     font-weight:bold;
   }
-
   .bigTotal{
     font-size:18px;
     font-weight:bold;
   }
-
   @media(max-width:900px){
     .container{ width:100%; }
     .flex{ flex-direction:column; }
     .left60,.right40{ width:100%; }
   }
-
   @media print{
     body{ background:#fff; }
   }
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
 <!-- ================= HEADER ================= -->
 <table>
   <tr>
-    <th class="header">BOULDER TRANSPORTATION</th>
+    <th class="header left">BOULDER TRANSPORTATION - MIS</th>
+    <th class="header right">Date : 20-11-2025</th>
   </tr>
 </table>
-
 <div class="flex">
-
 <!-- ================= LEFT 60% ================= -->
 <div class="left60">
-
 <!-- SUMMARY -->
 <table class="thick">
   <tr>
@@ -138,9 +116,11 @@
     <td>32,757</td>
   </tr>
 </table>
-
 <!-- VEHICLE WISE -->
 <table>
+  <tr>
+    <th class="subheader" colspan="5">Vehicle Wise Trips</th>
+  </tr>
   <tr>
     <th>Vehicle No</th>
     <th>Day</th>
@@ -148,7 +128,6 @@
     <th>FTD</th>
     <th>MTD</th>
   </tr>
-
   <tr><td class="left">AP39UQ0095</td><td>0</td><td>0</td><td>0</td><td>57</td></tr>
   <tr><td class="left">AP39UQ0097</td><td>5</td><td>5</td><td>10</td><td>95</td></tr>
   <tr><td class="left">AP39UW9880</td><td>6</td><td>6</td><td>12</td><td>152</td></tr>
@@ -161,25 +140,24 @@
   <tr><td class="left">AP39WF2052</td><td>3</td><td>7</td><td>10</td><td>118</td></tr>
   <tr><td class="left">AP39WF2057</td><td>3</td><td>6</td><td>9</td><td>149</td></tr>
   <tr><td class="left">AP39WF2058</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-
   <tr class="total">
     <td class="left"><b>Total</b></td>
-    <td>39</td>
-    <td>54</td>
-    <td>93</td>
-    <td>1,368</td>
+    <td><b>39</b></td>
+    <td><b>54</b></td>
+    <td><b>93</b></td>
+    <td><b>1,368</b></td>
   </tr>
 </table>
-
 </div>
-
 <!-- ================= RIGHT 40% ================= -->
 <div class="right40">
-
 <!-- PRODUCTION -->
 <table>
   <tr>
-    <th>Production</th>
+    <th class="subheader" colspan="3">Production</th>
+  </tr>
+  <tr>
+    <th>Material</th>
     <th>FTD</th>
     <th>MTD</th>
   </tr>
@@ -190,18 +168,16 @@
   <tr><td class="left">40 MM</td><td></td><td></td></tr>
   <tr><td class="left">Rivo Sand</td><td>763.2</td><td>7,444.8</td></tr>
   <tr><td class="left">Slurry</td><td>84.8</td><td>827.2</td></tr>
-
   <tr class="total">
     <td class="left"><b>Total</b></td>
     <td><b>2,120</b></td>
     <td><b>20,680</b></td>
   </tr>
 </table>
-
 <!-- GODOWN STOCK -->
 <table>
   <tr>
-    <th colspan="2" class="orangeText center">Godown Stock</th>
+    <th colspan="2" class="subheader orangeText center">Godown Stock</th>
   </tr>
   <tr><td class="left">10 MM</td><td>130</td></tr>
   <tr><td class="left">20 MM</td><td>4,250</td></tr>
@@ -210,16 +186,13 @@
   <tr><td class="left">40 MM</td><td></td></tr>
   <tr><td class="left">VSI</td><td>17,235</td></tr>
   <tr><td class="left">GSB</td><td></td></tr>
-
   <tr>
-    <td class="left bigTotal">Total</td>
-    <td class="bigTotal">42,035</td>
+    <td class="left bigTotal"><b>Total</b></td>
+    <td class="bigTotal"><b>42,035</b></td>
   </tr>
 </table>
-
 </div>
 </div>
-
 </div>
 </body>
 </html>
